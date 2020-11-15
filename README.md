@@ -5,7 +5,7 @@ To download Raspbian Lite OS
 ```console
 wget https://downloads.raspberrypi.org/raspbian_lite_latest -O raspbian_lite_latest.zip
 ```
-Note: To run shell scripts seemlessly add these lines at the bottom of your .bashrc files (/home/<username>/.bashrc) provided the name of your shared nfs drive is "nfsdrive" and you have stored all the scripts inside admin_scripts directory.
+Note: To run shell scripts seemlessly add these lines at the bottom of your .bashrc files (/home/username/.bashrc) provided the name of your shared nfs drive is "nfsdrive" and you have stored all the scripts inside admin_scripts directory.
 
 ```console
 alias tempcheck='/nfsdrive/admin_scripts/tempRasp.sh'
