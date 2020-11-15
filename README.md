@@ -5,16 +5,12 @@ To download Raspbian Lite OS
 
 wget https://downloads.raspberrypi.org/raspbian_lite_latest -O raspbian_lite_latest.zip
 
-Note: To run shell scripts seemlessly
-
-Add these lines at the bottom of your .bashrc files (/home/<username>/.bashrc)
+Note: To run shell scripts seemlessly add these lines at the bottom of your .bashrc files (/home/<username>/.bashrc) provided the name of your shared nfs drive is "nfsdrive" and you have stored all the scripts inside admin_scripts directory.
 
 ```console
-alias tempcheck='/clusterfs/admin_scripts/temprasp.sh'
-alias clusterup='/clusterfs/admin_scripts/resume_cluster.sh'
-alias clusterdown='/clusterfs/admin_scripts/shutdown_cluster.sh'
-alias wipiusradd='/clusterfs/admin_scripts/wipi_usradd.sh'
-
+alias tempcheck='/nfsdrive/admin_scripts/tempRasp.sh'
+alias clusterup='/nfsdrive/admin_scripts/clusterup.sh'
+alias clusterdown='/nfsdrive/admin_scripts/clusterdown.sh'
 
 To install Gkeyll on WiPi:
 
