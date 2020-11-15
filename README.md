@@ -1,5 +1,5 @@
-# wipi
 HPC with Raspberry Pi
+===========================
 
 
 wget https://downloads.raspberrypi.org/raspbian_lite_latest -O raspbian_lite_latest.zip
@@ -7,7 +7,9 @@ wget https://downloads.raspberrypi.org/raspbian_lite_latest -O raspbian_lite_lat
 To install Gkeyll in WiPi:
 
 Just comment out line 33 in file gkyl.cxx
+
 Also comment out the lines in main():
+```c
 #if defined(__clang__)
   fesetenv(FE_DFL_DISABLE_SSE_DENORMS_ENV);
 #elif defined(__powerpc__)
