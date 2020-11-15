@@ -11,7 +11,7 @@ Note: To run shell scripts seemlessly add these lines at the bottom of your .bas
 alias tempcheck='/nfsdrive/admin_scripts/tempRasp.sh'
 alias clusterup='/nfsdrive/admin_scripts/clusterup.sh'
 alias clusterdown='/nfsdrive/admin_scripts/clusterdown.sh'
-
+```
 To install Gkeyll on WiPi:
 
 Just comment out line 33 in file gkyl.cxx
@@ -25,7 +25,7 @@ Also comment out the lines in main():
 #elif defined(__GNUC__) || defined(__GNUG__)
   _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
 #endif
-
+```
 
 
 
