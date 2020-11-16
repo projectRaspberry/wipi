@@ -64,7 +64,7 @@ To do this part, you need a wireless router with DHCP enabled. The [Dynamic Host
 
 Now, login to the wireless router management page using browser. If your laptop is connected to the same network, just type the gateway IP. e.g. if you IP is 192.168.1.3, usually your gateway is 192.168.1.1, it's really simple. If you have trouble getting into the management page look for proper information on the router body. It's written somewhere on the body. After getting into the management page, go to the connected devices page and keep it open.
 
-Now, power on the master node first by connecting the USB-C cable from a power outlet (or the 6-port USB power supply) and keep refresing the page. If everything goes well, you should see a new device named raspberrypi connected to the network. Now note down the IPV4 address associated with it.
+Now, power on the master node first by connecting the USB-C cable from a power outlet (or the 6-port USB power supply) and keep refresing the page. If everything goes well, you should see a new device named **raspberrypi** connected to the network. Now note down the IPV4 address associated with it.
 
 Next, power on the one off the compute nodes and do the same (note it as node01). Repeat the process for all the compute nodes. At the end, you should have something similar to the following information with you:
 
@@ -90,13 +90,28 @@ PING 192.168.1.5: 56 data bytes
 round-trip min/avg/max/stddev = 1.947/3.317/3.635/0.614 ms
 ```
 
-**Note**: *If you have options to reserve IP on your wireless router management page, it is advised to do so for all the Pis. However, it is not mangetory.*
+**Note**: *If you have options to reserve IP on your wireless router management page, it is advised to do so for all the Pis. However, it is not mandetory.*
+
+# Step - 4: Test SSH
+
+[SSH or Secure Shell](https://en.wikipedia.org/wiki/SSH_(Secure_Shell)) provides a secure channel over an unsecured network by using a client–server architecture, connecting an SSH client application with an SSH server. We need to make sure we are able to acess  command-line and remotely execute shell commands on the Pis.
+
+Type the following,
+```console
+ssh pi@192.168.1.5
+```
+It would ask you for password with the following output
+```console
+pi@192.168.1.5's password:
+```
+Enter **raspberry** as the default password. After successful login it would look like:
+```console
+pi@raspberrypi:
+```
+Test the same for all the three compute nodes.
 
 
-
-######################################
-
-
+# Setting up aliases for easy commands
 Note: To run shell scripts seemlessly add these lines at the bottom of your .bashrc files (/home/username/.bashrc) provided the name of your shared nfs drive is "nfsdrive" and you have stored all the scripts inside admin_scripts directory.
 
 ```console
@@ -104,7 +119,7 @@ alias tempcheck='/nfsdrive/admin_scripts/tempRasp.sh'
 alias clusterup='/nfsdrive/admin_scripts/clusterup.sh'
 alias clusterdown='/nfsdrive/admin_scripts/clusterdown.sh'
 ```
-To install Gkeyll on WiPi:
+# To install Gkeyll on WiPi
 
 Just comment out line 33 in file gkyl.cxx
 
