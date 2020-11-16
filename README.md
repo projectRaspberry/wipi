@@ -1,5 +1,13 @@
-HPC with Raspberry Pi
+Building HPC with Raspberry Pi
 ===========================
+#Step - 0: The Hardware
+ - 3x Raspberry Pi 4 Model B - for compute nodes
+ - 1x Raspberry Pi 4 Model B - for master/login node
+ - 4x MicroSD Cards
+ - 4x USB-C power cables
+ - 1x 5-port 10/100/1000 network switch
+ - 1x 6-port USB power-supply (optional)
+ - 1x 128GB SSD (optional)
 
 To download Raspbian Lite OS
 ```console
