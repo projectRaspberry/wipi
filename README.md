@@ -73,6 +73,23 @@ Next, power on the one off the compute nodes and do the same (note it as node01)
 * node02 IPV4: **192.168.1.7**
 * node03 IPV4: **192.168.1.8**
 
+Now, try to ping each of the Pis from your computer terminal and wait for couple of seconds, then kill it by pressing  Ctrl + c.
+```console
+ping 192.168.1.5
+```
+You should get an output very similar to the following
+```console
+PING 192.168.1.5: 56 data bytes
+64 bytes from 192.168.1.5: icmp_seq=0 ttl=59 time=1.947 ms
+64 bytes from 192.168.1.5: icmp_seq=1 ttl=59 time=3.582 ms
+64 bytes from 192.168.1.5: icmp_seq=2 ttl=59 time=3.595 ms
+64 bytes from 192.168.1.5: icmp_seq=3 ttl=59 time=3.619 ms
+...
+--- 192.168.1.5 ping statistics ---
+6 packets transmitted, 6 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.947/3.317/3.635/0.614 ms
+```
+
 **Note**: *If you have options to reserve IP on your wireless router management page, it is advised to do so for all the Pis. However, it is not mangetory.*
 
 
