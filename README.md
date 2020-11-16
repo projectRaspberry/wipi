@@ -49,15 +49,13 @@ Now, we have successfully configured a Raspbian Lite OS having ssh enabled. Letâ
 diskutil unmountDisk /dev/disk2
 ```
 
-Repeat this process for all four memory cards. Now insert the cards to your Raspberry Pis.
-
-Now mark the master node to separate it from others.
+Repeat this process for all four memory cards. Now insert the cards to your Raspberry Pis. Remember to mark the master node to separate it from others.
 
 
 
 
 
-
+######################################
 
 
 Note: To run shell scripts seemlessly add these lines at the bottom of your .bashrc files (/home/username/.bashrc) provided the name of your shared nfs drive is "nfsdrive" and you have stored all the scripts inside admin_scripts directory.
