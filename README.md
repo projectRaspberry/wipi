@@ -1,6 +1,6 @@
 Building HPC with Raspberry Pi
 ===========================
-#Step - 0: The Hardware
+# Step - 0: The Hardware
  - 3x Raspberry Pi 4 Model B - for compute nodes
  - 1x Raspberry Pi 4 Model B - for master/login node
  - 4x MicroSD Cards
