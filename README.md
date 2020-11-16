@@ -68,10 +68,10 @@ Now, power on the master node first by connecting the USB-C cable from a power o
 
 Next, power on the one off the compute nodes and do the same (note it as node01). Repeat the process for all the compute nodes. At the end, you should have something similar to the following information with you:
 
-* master IPV4: 192.168.1.5
-* node01 IPV4: 192.168.1.6
-* node02 IPV4: 192.168.1.7
-* node03 IPV4: 192.168.1.8
+* master IPV4: **192.168.1.5**
+* node01 IPV4: **192.168.1.6**
+* node02 IPV4: **192.168.1.7**
+* node03 IPV4: **192.168.1.8**
 
 **Note**: *If you have options to reserve IP on your wireless router management page, it is advised to do so for all the Pis. However, it is not mangetory.*
 
