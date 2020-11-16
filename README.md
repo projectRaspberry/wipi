@@ -1,5 +1,8 @@
 Building HPC with Raspberry Pi
 ===========================
+![Raspberry Pi Cluster View](/images/pi_cluster_view2.jpg)
+![Raspberry Pi Cluster View](/images/pi_cluster_view1.jpg)
+
 # Step - 0: The Hardware
  - 3x Raspberry Pi 4 Model B - for compute nodes
  - 1x Raspberry Pi 4 Model B - for master/login node
