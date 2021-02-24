@@ -223,9 +223,10 @@ sudo exportfs -a
 ```
 One of the tasks for NFS to work remains unfinished which we will do in the next section.
 
-# Step 4: Setting Up the Worker Nodes
+# Step - 4: Setting Up the Worker Nodes
+We have already decided the IPs for worker nodes [See Step - 2](#step-2)
 
-# Step - 4: Test SSH
+# Step - 5: Test SSH
 
 [SSH or Secure Shell](https://en.wikipedia.org/wiki/SSH_(Secure_Shell)) provides a secure channel over an unsecured network by using a client–server architecture, connecting an SSH client application with an SSH server. We need to make sure we are able to acess  command-line and remotely execute shell commands on the Pis.
 
