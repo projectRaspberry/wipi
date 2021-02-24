@@ -13,7 +13,7 @@ Building HPC with Raspberry Pi
  - 1x 6-port USB power-supply (optional)
  - 1x 128GB SSD/external HDD (optional)
 
-# Step - 1: Prepare Raspberry Pi OS
+# Step - 1: Prepare the Micro-SD cards for Raspberry Pi OS
 Download latest version of Raspbian Lite OS by using your MacOS/Linux terminal and type
 
 ```console
@@ -35,6 +35,10 @@ lsblk
 Let’s say it is attached to dev/disk2. First unmount the disk,
 ```console
 diskutil unmountDisk /dev/disk2
+```
+For linux (use "sudo" if necessary)
+```console
+umount /dev/disk2
 ```
 Then flash the image to memory card
 ```console
