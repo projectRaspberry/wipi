@@ -284,7 +284,7 @@ pi@node01 ~> sudo nano /etc/fstab
 And add the following line below the existing texts
 ```console
 192.168.2.3:/shared    /shared    nfs    defaults   0 0
-```console
+```
 Now, use the following to finish the mounting
 ```console
 pi@node01 ~> sudo mount -a
