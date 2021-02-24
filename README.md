@@ -122,7 +122,7 @@ alias tempcheck='/nfsdrive/admin_scripts/tempRasp.sh'
 alias clusterup='/nfsdrive/admin_scripts/clusterup.sh'
 alias clusterdown='/nfsdrive/admin_scripts/clusterdown.sh'
 ```
-# To install Gkeyll on WiPi
+# To install Gkeyll on WiPi (Optional)
 
 Just comment out line 33 in file gkyl.cxx
 
