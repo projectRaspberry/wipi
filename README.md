@@ -101,7 +101,7 @@ round-trip min/avg/max/stddev = 1.947/3.317/3.635/0.614 ms
 
 Now, log in to your master node using
 ```console
-ssh pi@192.168.2.2
+ssh pi@192.168.2.3
 ```
 Upon connection use password raspberry. (Note: it is the default password)
 
@@ -137,10 +137,9 @@ pi@raspberrypi ~> sudo nano /etc/hosts
 Add the following at the bottom of the existing information
 ```console
 127.0.1.1       master
-192.168.2.2     master
-192.168.2.3     node01
-192.168.2.4     node02
-192.168.2.5     node03
+192.168.2.3     master
+192.168.2.4     node01
+192.168.2.5     node02
 ```
 
 ### Network time:
@@ -224,26 +223,462 @@ sudo exportfs -a
 One of the tasks for NFS to work remains unfinished which we will do in the next section.
 
 # Step - 4: Setting Up the Worker Nodes
-We have already decided the IPs for worker nodes [See Step - 2](#step-2)
-
-# Step - 5: Test SSH
-
-[SSH or Secure Shell](https://en.wikipedia.org/wiki/SSH_(Secure_Shell)) provides a secure channel over an unsecured network by using a client–server architecture, connecting an SSH client application with an SSH server. We need to make sure we are able to acess  command-line and remotely execute shell commands on the Pis.
-
-Type the following,
+We already have the IPs for worker nodes [See Step - 2](#step---2-network-setup). Now let's prepare them one by one. Log into node01 by using the following command,
 ```console
-ssh pi@192.168.1.5
+ssh pi@192.168.2.4
 ```
-It would ask you for password with the following output
+It will ask for a password, use the default one “raspberry.” It will open up a terminal, the same that you had for the master. Now configure the node using 
 ```console
-pi@192.168.1.5's password:
+pi@raspberrypi~$ sudo raspi-config
 ```
-Enter **raspberry** as the default password. After successful login it would look like:
-```console
-pi@raspberrypi:
-```
-Test the same for all the three compute nodes.
+It opens up the config utility. Next you should set the locale, timezone, and wifi country. Then, select finish and press enter to exit the utility. Exactly same what you did for the master node, except the password. 
 
+Now let’s update the hostname.
+```console
+pi@raspberrypi ~> sudo hostname node01
+```
+Change "raspberrypi" to “node01” by editing the hostname file.
+```console    
+pi@raspberrypi ~> sudo nano /etc/hostname  
+```
+Now edit the hosts file
+```console
+pi@raspberrypi ~> sudo nano /etc/hosts  
+```
+Add the following
+```console
+127.0.1.1       node01
+192.168.2.3     master
+192.168.2.4     node01
+192.168.2.5     node02
+```
+Next,
+
+System Update and Upgrade
+```console
+pi@raspberrypi ~> sudo apt-get update && sudo apt-get upgrade
+```
+Now reboot the system to apply the effect of changes that have been made so far.
+```console
+pi@raspberrypi ~> sudo reboot
+```
+
+After the reboot, login to the system again.
+
+### NFS MOUNT
+
+To access the storage that we shared on master node from individual worker nodes, we need to install and configure NFS services.
+```console
+sudo apt install nfs-common -y
+```
+Now, we need to create the same directory in order to mount the storage.
+```console
+pi@node01 ~> sudo mkdir /shared 
+pi@node01 ~> sudo chown nobody.nogroup /shared 
+pi@node01 ~> sudo chmod -R 777 /shared
+```
+To allow automatic mounting we need to edit the fstab file for each node. Use the following command to edit,
+```console
+pi@node01 ~> sudo nano /etc/fstab
+```
+And add the following line below the existing texts
+```console
+192.168.2.3:/shared    /shared    nfs    defaults   0 0
+```console
+Now, use the following to finish the mounting
+```console
+pi@node01 ~> sudo mount -a
+```
+To check whether the shared storage is working. Open a new terminal window and login to your master node. Then create a blank file. 
+```console
+ssh pi@192.168.2.3
+```
+```console
+pi@master ~> cd /shared
+pi@master ~> touch nas_test.dat
+```
+Now go back to the node01 terminal and check the contents of your shared directory
+```console
+pi@node01 ~> cd /shared
+pi@node01 ~> ls
+```
+If you see nas_test.dat file here, means you have successfully created a Network File System. If you can’t see, you may have to reboot the node once.
+
+Now repeat the process for rest of the worker nodes. Remember to replace “node01” word with their respective node numbers.
+
+# Step - 5: Configuring SLURM on master Node
+Slurm is an open source, and highly scalable cluster management and job scheduling system. It can be used for both large and small Linux clusters. Let’s install it on our Pi cluster.
+```console
+pi@master ~> sudo apt install slurm-wlm -y
+```
+Upon successful installation, we need to configure slurm,
+```console
+pi@master ~> cd /home/pi
+pi@master ~> cp /usr/share/doc/slurm-client/examples/slurm.conf.simple.gz .
+pi@master ~> gzip -d slurm.conf.simple.gz
+pi@master ~> sudo mv slurm.conf.simple /etc/slurm-llnl/slurm.conf 
+```
+Now edit the configuration file by searching for the keyword on the left (e.g. “SlurmctlHost”) and edit the line as per the information provide below,
+```console
+pi@master ~> sudo nano /etc/slurm-llnl/slurm.conf
+```
+```console
+SlurmctldHost=master(192.168.2.2)
+SelectType=select/cons_res
+SelectTypeParameters=CR_Core
+ClusterName=cluster
+```
+Now we need to add the node information as well as partition at the end of the file. Delete the example entry for the compute node and add the following configurations for the cluster nodes:
+```console
+NodeName=master NodeAddr=192.168.2.2 CPUs=4 State=UNKNOWN
+NodeName=node01 NodeAddr=192.168.2.3 CPUs=4 State=UNKNOWN
+NodeName=node02 NodeAddr=192.168.2.4 CPUs=4 State=UNKNOWN
+NodeName=node03 NodeAddr=192.168.2.5 CPUs=4 State=UNKNOWN
+PartitionName=picluster Nodes=node[01-03] Default=YES MaxTime=INFINITE State=UP
+```
+Now we need to create a configuration for cgroup support
+```console
+pi@master ~> sudo nano /etc/slurm-llnl/cgroup.conf
+```
+Now, add the following,
+```console
+CgroupMountpoint="/sys/fs/cgroup"
+CgroupAutomount=yes
+CgroupReleaseAgentDir="/etc/slurm-llnl/cgroup"
+AllowedDevicesFile="/etc/slurm-llnl/cgroup_allowed_devices_file.conf"
+ConstrainCores=no
+TaskAffinity=no
+ConstrainRAMSpace=yes
+ConstrainSwapSpace=no
+ConstrainDevices=no
+AllowedRamSpace=100
+AllowedSwapSpace=0
+MaxRAMPercent=100
+MaxSwapPercent=100
+MinRAMSpace=30
+```
+
+Now, we need to whitelist system devices by creating the file 
+
+```console
+pi@master ~> sudo nano /etc/slurm-llnl/cgroup_allowed_devices_file.conf
+```
+Now add the following lines,
+```console
+/dev/null
+/dev/urandom
+/dev/zero
+/dev/sda*
+/dev/cpu/*/*
+/dev/pts/*
+/shared*
+```
+Now we need to set the same for all nodes. To do that we need to copy these files to the shared storage.
+```console
+pi@master ~> sudo cp /etc/slurm-llnl/*.conf /shared
+pi@master ~> sudo cp /etc/munge/munge.key /shared
+```
+
+All done, now we need to enable and start SLURM Control Services and munge,
+```console
+pi@master ~> sudo systemctl enable munge
+pi@master ~> sudo systemctl start munge
+```
+```console
+pi@master ~> sudo systemctl enable slurmd
+pi@master ~> sudo systemctl start slurmd
+```
+```console
+pi@master ~> sudo systemctl enable slurmctld
+pi@master ~> sudo systemctl start slurmctld
+```
+
+To ensure smooth operation, we need to reboot the system at this point.
+
+# Step - 6: Configuring SLURM on Compute Nodes
+
+We have successfully configured the master node, we need to do the same on compute nodes. Now, log into the one of the nodes and install slurm
+```console
+pi@node01 ~> sudo apt install slurmd slurm-client -y
+```
+Upon installation, we need to copy the configuration files from the shared storage to the node.
+```console
+pi@node01 ~> sudo cp /shared/munge.key /etc/munge/munge.key
+pi@node01 ~> sudo cp /shared/*.conf /etc/slurm-llnl/
+```
+Similar to the master node, we need to enable and start slurm daemon and munge on the nodes.
+```console
+pi@node01 ~> sudo systemctl enable munge
+pi@node01 ~> sudo systemctl start munge
+```
+```console
+pi@node01 ~> sudo systemctl enable slurmd
+pi@node01 ~> sudo systemctl start slurmd
+```
+
+Now, we need to verify whether our the SLURM controller can successfully authenticate with the client nodes using munge. In order to do that, we need to login to master node and use the following command,
+```console
+pi@master ~> ssh pi@node01 munge -n | unmunge
+```
+Upon successful operation, you should get output something similar to the following,
+```console
+ssh pi@node01 munge -n | unmunge
+pi@node01's password: 
+STATUS:           Success (0)
+ENCODE_HOST:      master (127.0.1.1)
+ENCODE_TIME:      2020-08-30 22:45:00 +0200 (1598820300)
+DECODE_TIME:      2020-08-30 22:45:00 +0200 (1598820300)
+TTL:              300
+CIPHER:           aes128 (4)
+MAC:              sha256 (5)
+ZIP:              none (0)
+UID:              pi (1001)
+GID:              pi (1001)
+LENGTH:           0
+```
+Sometime, you might get an error, which indicates that you may have failed to copy the exact munge key to the nodes.
+
+Now repeat this process on all the other nodes.
+
+
+# Step - 7: Test SLURM 
+Login to master node using ssh and type the following command
+```console
+pi@master ~>sinfo
+```
+You should get an output something like this
+```console
+PARTITION  AVAIL  TIMELIMIT  NODES  STATE NODELIST
+picluster*    up   infinite      3   idle node[01-03]
+```
+
+To resume the nodes
+```console
+sudo scontrol update NodeName=node[01-03] state=resume
+```
+You can simply run a task to ask the hostname for each node
+```console
+pi@master ~>srun --nodes=3 hostname
+```
+It will give you an output similar to
+```console
+node02
+node03
+node01
+```
+# Step - 8: Powering On and Off (Cluster)
+Write a shell script with the following lines of codes and save it as clusterup.sh
+```console
+#!/bin/bash
+sudo scontrol update NodeName=node[01-03] state=resume
+sinfo
+echo "Nodes up and running"
+```
+
+Now, you need to setup password less super user access to perform the next action. To do that efficiently, we need to create admin groups
+```console
+sudo groupadd admin
+```
+Now add your users (or yourself) to that group
+```console
+sudo usermod –a –G admin pi
+```
+Now edit sudoers file 
+```console
+sudo vim /etc/sudoers
+```
+Add these lines or edit accordingly
+```console
+# User privilege specification
+root	ALL=(ALL:ALL) ALL
+# Allow members of group sudo to execute any command
+%sudo	ALL=(ALL:ALL) ALL
+%admin	ALL=(ALL) ALL
+# See sudoers(5) for more information on "#include" directives:
+%admin	ALL=(ALL) NOPASSWD: ALL
+```
+REPEAT this process for each node. Starting from admin group add.
+Write a shell script with the following lines of codes and save it as clusterdown.sh
+```console
+#!/bin/bash
+echo "WiPi Cluster Shutdown"
+echo "====================="
+sudo scontrol update NodeName=node[01-03] state=down reason="power down"
+ssh node01 "sudo halt"
+ssh node02 "sudo halt"
+ssh node03 "sudo halt"
+echo "Nodes disconnected and shutting down"
+echo "Do you want to shutdown master node too?"
+echo "Press 'y' to continue or q to abort"
+count=0
+while : ; do
+read -n 1 k <&1
+if [[ $k = y ]] ; then
+printf "\nShutting down Master Node\n"
+sudo halt
+elif [[ $k = q ]] ; then
+printf "\nShutdown aborted\n" 
+break
+else
+((count=$count+1))
+printf "\nWrong Key Pressed\n"
+echo "Press 'q' to abort"
+fi
+done
+```
+
+Now make these scripts executable using the following command
+```console
+pi@master ~>chmod a+x clusterup.sh
+pi@master ~>chmod a+x clusterup.sh
+```
+Each time you power on your cluster, run this script at the startup using the following command.
+```console
+pi@master ~>./clusterup.sh
+```
+Each time you need to power off your cluster, run this script at the end using the following command.
+```console
+pi@master ~>./clusterdown.sh
+```
+
+# Step - 9: Password-less SSH
+
+Now, we’ll set up password-less SSH on master node
+```console
+pi@master ~> ssh-keygen -t rsa
+```
+This would ask you for input, each time press enter key to proceed. After successful operation, the output will look like the following
+```console
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/pi/.ssh/id_rsa): 
+Created directory '/home/pi/.ssh'.
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /home/pi/.ssh/id_rsa.
+Your public key has been saved in /home/pi/.ssh/id_rsa.pub.
+The key fingerprint is:
+9b:98:c7:86:17:0a:1e:32:95:65:ee:1c:0f:48:48:ef pi@beira
+The key's randomart image is:
++---[RSA 2048]----+
+| .... o          |
+|  .o *           |
+|    = +          |
+|   o o +         |
+|  o E o S        |
+|   + o * +       |
+|    . = B        |
+|       +         |
+|                 |
++-----------------+
+```
+Now copy your rsa key to all the nodes
+```console
+pi@master ~> ssh-copy-id pi@node01
+```
+```console
+pi@master ~> ssh-copy-id pi@node02
+```
+```console
+pi@master ~> ssh-copy-id pi@node03
+```
+# Step - 10: OpenMPI
+
+OpenMPI is the Open sourced Message Passing Interface. In short it is a very abstract description on how messages can be exchanged between different processes. It will allow us to run a job across multiple nodes connected to the same cluster.
+```console
+pi@master ~>sudo su -
+#srun —-nodes=3 apt install openmpi-bin openmpi-common libopenmpi3 libopenmpi-dev -y
+```
+Note: the number 3 was chosen based on our available nodes.
+
+If you are interested in using master node as well, you need to install the same for master node too.
+```console
+pi@master ~>sudo apt install openmpi-bin openmpi-common libopenmpi3 libopenmpi-dev -y
+```
+Now create a host file to run MPI jobs
+```console
+pi@master ~>nano hostfile
+```
+Now add the following (Change the ip addresses accordingly)
+```console
+192.168.2.3:4
+192.168.2.4:4
+192.168.2.5:4
+```
+NOTE: The last number “4” represents the number of cores(processors) in each CPU.
+
+Now, we are ready to use MPI on our cluster. Let’s test a sample script.
+
+Create a hello world program in C and save it as hello_mpi.c
+```c
+#include <mpi.h>
+#include <stdio.h>
+
+int main(int argc, char** argv) {
+    // Initialize the MPI environment
+    MPI_Init(NULL, NULL);
+
+    // Get the number of processes
+    int world_size;
+    MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+
+    // Get the rank of the process
+    int world_rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+
+    // Get the name of the processor
+    char processor_name[MPI_MAX_PROCESSOR_NAME];
+    int name_len;
+    MPI_Get_processor_name(processor_name, &name_len);
+
+    // Print off a hello world message
+    printf("Hello world from processor %s, rank %d"
+           " out of %d processors\n",
+           processor_name, world_rank, world_size);
+
+    // Finalize the MPI environment.
+    MPI_Finalize();
+}
+```
+Now, compile the program using mpicc
+```console
+mpicc hello_mpi.c
+```
+This would create an executable name a.out
+You can run the executable using the following command
+```console
+mpirun -np 3 -hostfile hostfile ./a.out
+```
+Now, let’s test the same using SLURM job manager. In order to do so, first we have to create a job script. Create a file named hello_mpi.sh and enter the following lines
+```console
+#!/bin/bash
+#SBATCH --nodes=3
+#SBATCH --ntasks-per-node=4
+#SBATCH --partition=picluster
+cd $SLURM_SUBMIT_DIR
+mpicc hello_mpi.c -o hello_mpi
+mpirun ./hello_mpi
+```
+NOTE: The number 3 represents the number of nodes available in your cluster and the number 4 represents the number of cores(processors) available in each node.
+
+To submit a job use the following command
+```console
+sbatch hello_mpi.sh 
+```
+To view the status of any job
+```console
+squeue -u pi
+```
+NOTE: pi is your username
+
+# References:
+- https://medium.com/@glmdev/building-a-raspberry-pi-cluster-784f0df9afbd
+- https://medium.com/@glmdev/building-a-raspberry-pi-cluster-aaa8d1f3d2ca
+- https://medium.com/@glmdev/building-a-raspberry-pi-cluster-f5f2446702e8
+- https://epcced.github.io/wee_archlet/
+- https://scw-aberystwyth.github.io/Introduction-to-HPC-with-RaspberryPi/
+- https://github.com/colinsauze/pi_cluster
+- https://magpi.raspberrypi.org/articles/build-a-raspberry-pi-cluster-computer
+- https://www.hydromag.eu/~aa3025/rpi/
 
 
 
