@@ -134,6 +134,97 @@ Now edit the hosts file
 pi@raspberrypi ~> sudo nano /etc/hosts   
 ```
 
+Add the following at the bottom of the existing information
+```console
+127.0.1.1       master
+192.168.2.2     master
+192.168.2.3     node01
+192.168.2.4     node02
+192.168.2.5     node03
+```
+
+### Network time:
+
+Now, since we are planning for a HPC system that uses a SLURM scheduler and the Munge authentication, we need to make sure that the system time is accurate. For that purpose we can install ntpdate package to periodically sync the system time in the background.
+```console
+pi@raspberrypi ~> sudo apt install ntpdate -y
+```
+To apply the effect of changes that have been made so far reboot the system using the following command
+```console
+sudo reboot
+```
+After, successful reboot, login to the master node again using ssh. 
+
+Next stop, shared storage:
+
+The concept of cluster is based on idea of working together. In order to do so, they need to have access to the same files. We can arrange this mounting an external SSD drive (not necessary but convenient and faster) and exporting that storage as a network file system (NFS). It would allow us to access the files from all nodes.
+
+First, insert the external storage into your master node. Now login to your master node using ssh and use the following command to see the dev location and mount point of your storage.
+```console
+pi@master ~> lsblk
+NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+mmcblk0     105:0    0  7.4G  0 disk 
+├─mmcblk0p1 105:1    0 43.8M  0 part /boot
+└─mmcblk0p2 105:2    0  7.4G  0 part /
+sda         3:16     0 59.2G  0 disk
+└─sda1      3:17     0 59.2G  0 part
+```
+
+In our case, the main partition of the external storage is mounted at /dev/sda1
+Before, using it as a NFS drive, we need to format it properly in ext4 file system. Use the following command to do that.
+```console
+sudo mkfs.ext4 /dev/sda1
+```
+
+Now, we need to create a directory where the storage will be mounted. We can choose any name for that. But, lets choose something that is easy to remember e.g. “shared”,
+```console
+sudo mkdir /nfsdrive
+sudo chown nobody.nogroup -R /shared
+sudo chmod 777 -R /shared
+```
+
+Now, we need to configure to mount the storage during boot. For, that we need the the UUID of the storage. We can find that using the following command,
+```console
+pi@master ~> blkid
+```
+Now, copy the number from /dev/sda1. It’ll look like
+UUID=“78543e7a-4hy6-7yea-1274-01e0ff974531”
+
+Now, open and edit fstab to mount the drive on boot.
+```console
+pi@master ~> sudo nano /etc/fstab
+```
+Add the following line:
+```console
+UUID=78543e7a-4hy6-7yea-1274-01e0ff974531 /nfsdrive ext4 defaults 0 2
+```
+All done, now we can mount the drive using the following command,
+```console
+pi@master ~> sudo mount -a
+```
+If it fails for some reason, reboot the master node and try again. If it is still not working double check the process and look for typo.
+
+### Enable NFS Share
+
+
+Now, we have a storage that can be shared but we need to install NFS server on master node in order to do so.
+```console
+pi@master ~> sudo apt install nfs-kernel-server -y
+```
+Now, edit /etc/exports and add the following line to export
+```console
+/shared 192.168.2.0/24(rw,sync,no_root_squash,no_subtree_check)
+```
+Remember, depending upon the IP address schema used on your local network, the ip will be different for setup. For example, if your master node ip is 10.0.0.1, then you need to replace the ip with 10.0.0.0/24.
+
+Now, we can update the configuration of the NFS kernel with the following command,
+```console
+sudo exportfs -a
+```
+One of the tasks for NFS to work remains unfinished which we will do in the next section.
+
+# Step 4: Setting Up the Worker Nodes
+
 # Step - 4: Test SSH
 
 [SSH or Secure Shell](https://en.wikipedia.org/wiki/SSH_(Secure_Shell)) provides a secure channel over an unsecured network by using a client–server architecture, connecting an SSH client application with an SSH server. We need to make sure we are able to acess  command-line and remotely execute shell commands on the Pis.
