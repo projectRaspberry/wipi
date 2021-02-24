@@ -114,6 +114,26 @@ It opens up the config utility. You can change the default password if you want 
 A snapshot of the utility screen is provided below.
 
 ![Raspberry Pi Configuration Window](/images/raspi-config.jpg)
+
+
+### System Update and Upgrade
+```console
+pi@raspberrypi ~> sudo apt-get update && sudo apt-get upgrade
+```
+Now, we need to decide the hostnames for master node as well as cluster nodes. I would recommend to stick with the usual ones. Set “master” for master node and for cluster nodes starting from “node01” to “node03” (for 3 node cluster). Use the following command to set it up on master node.
+```console
+pi@raspberrypi ~> sudo hostname master     # choice of yours
+```
+Change "raspberrypi" to “master” by editing the hostname file.
+
+```console
+pi@raspberrypi ~> sudo nano /etc/hostname  
+```
+Now edit the hosts file
+```console
+pi@raspberrypi ~> sudo nano /etc/hosts   
+```
+
 # Step - 4: Test SSH
 
 [SSH or Secure Shell](https://en.wikipedia.org/wiki/SSH_(Secure_Shell)) provides a secure channel over an unsecured network by using a client–server architecture, connecting an SSH client application with an SSH server. We need to make sure we are able to acess  command-line and remotely execute shell commands on the Pis.
@@ -132,29 +152,6 @@ pi@raspberrypi:
 ```
 Test the same for all the three compute nodes.
 
-
-# Setting up aliases for easy commands
-Note: To run shell scripts seemlessly add these lines at the bottom of your .bashrc files (/home/username/.bashrc) provided the name of your shared nfs drive is "nfsdrive" and you have stored all the scripts inside admin_scripts directory.
-
-```console
-alias tempcheck='/nfsdrive/admin_scripts/tempRasp.sh'
-alias clusterup='/nfsdrive/admin_scripts/clusterup.sh'
-alias clusterdown='/nfsdrive/admin_scripts/clusterdown.sh'
-```
-# To install Gkeyll on WiPi (Optional)
-
-Just comment out line 33 in file gkyl.cxx
-
-Also comment out the lines in main():
-```c
-#if defined(__clang__)
-  fesetenv(FE_DFL_DISABLE_SSE_DENORMS_ENV);
-#elif defined(__powerpc__)
-  // not sure what the POWER calls are for denormalized floats
-#elif defined(__GNUC__) || defined(__GNUG__)
-  _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
-#endif
-```
 
 
 
