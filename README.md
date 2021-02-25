@@ -324,18 +324,17 @@ Now edit the configuration file by searching for the keyword on the left (e.g. â
 pi@master ~> sudo nano /etc/slurm-llnl/slurm.conf
 ```
 ```console
-SlurmctldHost=master(192.168.2.2)
+SlurmctldHost=master(192.168.2.3)
 SelectType=select/cons_res
 SelectTypeParameters=CR_Core
 ClusterName=cluster
 ```
 Now we need to add the node information as well as partition at the end of the file. Delete the example entry for the compute node and add the following configurations for the cluster nodes:
 ```console
-NodeName=master NodeAddr=192.168.2.2 CPUs=4 State=UNKNOWN
-NodeName=node01 NodeAddr=192.168.2.3 CPUs=4 State=UNKNOWN
-NodeName=node02 NodeAddr=192.168.2.4 CPUs=4 State=UNKNOWN
-NodeName=node03 NodeAddr=192.168.2.5 CPUs=4 State=UNKNOWN
-PartitionName=picluster Nodes=node[01-03] Default=YES MaxTime=INFINITE State=UP
+NodeName=master NodeAddr=192.168.2.3 CPUs=4 State=UNKNOWN
+NodeName=node01 NodeAddr=192.168.2.4 CPUs=4 State=UNKNOWN
+NodeName=node02 NodeAddr=192.168.2.5 CPUs=4 State=UNKNOWN
+PartitionName=picluster Nodes=node[01-02] Default=YES MaxTime=INFINITE State=UP
 ```
 Now we need to create a configuration for cgroup support
 ```console
