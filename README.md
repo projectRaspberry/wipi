@@ -174,10 +174,11 @@ Before, using it as a NFS drive, we need to format it properly in ext4 file syst
 ```console
 sudo mkfs.ext4 /dev/sda1
 ```
+:warning: Note: If you are not using any external storage, and want to use the Micro-SD card instead skip the formatting.
 
 Now, we need to create a directory where the storage will be mounted. We can choose any name for that. But, lets choose something that is easy to remember e.g. “shared”,
 ```console
-sudo mkdir /nfsdrive
+sudo mkdir /shared
 sudo chown nobody.nogroup -R /shared
 sudo chmod 777 -R /shared
 ```
@@ -195,7 +196,7 @@ pi@master ~> sudo nano /etc/fstab
 ```
 Add the following line:
 ```console
-UUID=78543e7a-4hy6-7yea-1274-01e0ff974531 /nfsdrive ext4 defaults 0 2
+UUID=78543e7a-4hy6-7yea-1274-01e0ff974531 /shared ext4 defaults 0 2
 ```
 All done, now we can mount the drive using the following command,
 ```console
