@@ -57,9 +57,9 @@ Now, we have successfully configured a Raspbian Lite OS having ssh enabled. Let�
 diskutil unmountDisk /dev/disk2
 ```
 
-Repeat this process for all four memory cards. Now insert the cards to your Raspberry Pis. Remember to mark the master node to separate it from others.
+Repeat this process for all three memory cards. Now insert the cards to your Raspberry Pis. Remember to mark the master node to separate it from others.
 
-Now plug in all the four memory cards in to the storage port of Raspberry Pis. Then connect the network cables(CAT5/6/6A) to in the ethernet port of Pis. Do not power on the Pis at the moment.
+Now plug in all the three memory cards in to the storage port of Raspberry Pis. Then connect the network cables(CAT5/6/6A) to in the ethernet port of Pis. Do not power on the Pis at the moment.
 
 # Step - 2: Network Setup
 
@@ -76,7 +76,6 @@ Next, power on the one off the compute nodes and do the same (note it as node01)
 * master IPV4: **192.168.1.3**
 * node01 IPV4: **192.168.1.4**
 * node02 IPV4: **192.168.1.5**
-* node03 IPV4: **192.168.1.6**
 
 Now, try to ping each of the Pis from your computer terminal and wait for couple of seconds, then kill it by pressing  Ctrl + c.
 ```console
@@ -84,7 +83,7 @@ ping 192.168.1.3
 ```
 You should get an output very similar to the following
 ```console
-PING 192.168.1.5: 56 data bytes
+PING 192.168.1.2: 56 data bytes
 64 bytes from 192.168.1.3: icmp_seq=0 ttl=59 time=1.947 ms
 64 bytes from 192.168.1.3: icmp_seq=1 ttl=59 time=3.582 ms
 64 bytes from 192.168.1.3: icmp_seq=2 ttl=59 time=3.595 ms
@@ -120,7 +119,7 @@ A snapshot of the utility screen is provided below.
 ```console
 pi@raspberrypi ~> sudo apt-get update && sudo apt-get upgrade
 ```
-Now, we need to decide the hostnames for master node as well as cluster nodes. I would recommend to stick with the usual ones. Set “master” for master node and for cluster nodes starting from “node01” to “node03” (for 3 node cluster). Use the following command to set it up on master node.
+Now, we need to decide the hostnames for master node as well as cluster nodes. I would recommend to stick with the usual ones. Set “master” for master node and for cluster nodes starting from “node01” to “node02” (for 2 node cluster). Use the following command to set it up on master node.
 ```console
 pi@raspberrypi ~> sudo hostname master     # choice of yours
 ```
@@ -187,9 +186,13 @@ Now, we need to configure to mount the storage during boot. For, that we need th
 ```console
 pi@master ~> blkid
 ```
-Now, copy the number from /dev/sda1. It’ll look like
-UUID=“78543e7a-4hy6-7yea-1274-01e0ff974531”
-
+```console
+/dev/mmcblk0p1: LABEL_FATBOOT="boot" LABEL="boot" UUID="4BBD-D3E7" TYPE="vfat" PARTUUID="738a4d67-01"
+/dev/mmcblk0p2: LABEL="rootfs" UUID="45e99191-771b-4e12-a526-0779148892cb" TYPE="ext4" PARTUUID="738a4d67-02"
+/dev/sda1: UUID="50e407fc-37d8-4eb4-994d-ca6254c4e12e" TYPE="ext4"
+```
+Now, copy the number from /dev/sda1 if you are using external HDD. Otherwise, copy the number from /dev/mmcblk0p2. It’ll look like
+UUID=“50e407fc-37d8-4eb4-994d-ca6254c4e12e”
 Now, open and edit fstab to mount the drive on boot.
 ```console
 pi@master ~> sudo nano /etc/fstab
