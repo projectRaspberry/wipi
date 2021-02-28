@@ -67,27 +67,27 @@ To do this part, you need a wireless router with DHCP enabled. The [Dynamic Host
 
 **Note**: *If you do not have the network switch, then connect the network cables directly to the wireless router.*
 
-Now, login to the wireless router management page using browser. If your laptop is connected to the same network, just type the gateway IP. e.g. if you IP is 192.168.1.2, usually your gateway is 192.168.1.1, it's really simple. If you have trouble getting into the management page look for proper information on the router body. It's written somewhere on the body. After getting into the management page, go to the connected devices page and keep it open.
+Now, login to the wireless router management page using browser. If your laptop is connected to the same network, just type the gateway IP. e.g. if you IP is 10.10.0.10, usually your gateway is 10.10.0.1, it's really simple. If you have trouble getting into the management page look for proper information on the router body. It's written somewhere on the body. After getting into the management page, go to the connected devices page and keep it open.
 
 Now, power on the master node first by connecting the USB-C cable from a power outlet (or the 6-port USB power supply) and keep refresing the page. If everything goes well, you should see a new device named **raspberrypi** connected to the network. Now note down the IPV4 address associated with it.
 
 Next, power on the one off the compute nodes and do the same (note it as node01). Repeat the process for all the compute nodes. At the end, you should have something similar to the following information with you:
 
-* master IPV4: **192.168.1.3**
-* node01 IPV4: **192.168.1.4**
-* node02 IPV4: **192.168.1.5**
+* master IPV4: **10.10.0.11**
+* node01 IPV4: **10.10.0.12**
+* node02 IPV4: **10.10.0.13**
 
 Now, try to ping each of the Pis from your computer terminal and wait for couple of seconds, then kill it by pressing  Ctrl + c.
 ```console
-ping 192.168.1.3
+ping 10.10.0.11
 ```
 You should get an output very similar to the following
 ```console
-PING 192.168.1.2: 56 data bytes
-64 bytes from 192.168.1.3: icmp_seq=0 ttl=59 time=1.947 ms
-64 bytes from 192.168.1.3: icmp_seq=1 ttl=59 time=3.582 ms
-64 bytes from 192.168.1.3: icmp_seq=2 ttl=59 time=3.595 ms
-64 bytes from 192.168.1.3: icmp_seq=3 ttl=59 time=3.619 ms
+PING 10.10.0.11: 56 data bytes
+64 bytes from 10.10.0.10: icmp_seq=0 ttl=59 time=1.947 ms
+64 bytes from 10.10.0.10: icmp_seq=1 ttl=59 time=3.582 ms
+64 bytes from 10.10.0.10: icmp_seq=2 ttl=59 time=3.595 ms
+64 bytes from 10.10.0.10: icmp_seq=3 ttl=59 time=3.619 ms
 ...
 --- 192.168.1.3 ping statistics ---
 6 packets transmitted, 6 packets received, 0.0% packet loss
@@ -100,7 +100,7 @@ round-trip min/avg/max/stddev = 1.947/3.317/3.635/0.614 ms
 
 Now, log in to your master node using
 ```console
-ssh pi@192.168.2.3
+ssh pi@10.10.0.11
 ```
 Upon connection use password raspberry. (Note: it is the default password)
 
@@ -136,9 +136,9 @@ pi@raspberrypi ~> sudo nano /etc/hosts
 Add the following at the bottom of the existing information
 ```console
 127.0.1.1       master
-192.168.2.3     master
-192.168.2.4     node01
-192.168.2.5     node02
+10.10.0.11     master
+10.10.0.12     node01
+10.10.0.13     node02
 ```
 
 ### Network time:
@@ -216,9 +216,9 @@ pi@master ~> sudo apt install nfs-kernel-server -y
 ```
 Now, edit /etc/exports and add the following line to export
 ```console
-/shared 192.168.2.0/24(rw,sync,no_root_squash,no_subtree_check)
+/shared 10.10.0.0/24(rw,sync,no_root_squash,no_subtree_check)
 ```
-Remember, depending upon the IP address schema used on your local network, the ip will be different for setup. For example, if your master node ip is 10.0.0.1, then you need to replace the ip with 10.0.0.0/24.
+Remember, depending upon the IP address schema used on your local network, the ip will be different for setup. For example, if your master node ip is 192.168.0.11, then you need to replace the ip with 192.168.0.0/24.
 
 Now, we can update the configuration of the NFS kernel with the following command,
 ```console
@@ -229,7 +229,7 @@ One of the tasks for NFS to work remains unfinished which we will do in the next
 # Step - 4: Setting Up the Worker Nodes
 We already have the IPs for worker nodes [See Step - 2](#step---2-network-setup). Now let's prepare them one by one. Log into node01 by using the following command,
 ```console
-ssh pi@192.168.2.4
+ssh pi@10.10.0.12
 ```
 It will ask for a password, use the default one “raspberry.” It will open up a terminal, the same that you had for the master. Now configure the node using 
 ```console
@@ -251,10 +251,10 @@ pi@raspberrypi ~> sudo nano /etc/hosts
 ```
 Add the following
 ```console
-127.0.1.1       node01
-192.168.2.3     master
-192.168.2.4     node01
-192.168.2.5     node02
+127.0.1.1      node01
+10.10.0.11     master
+10.10.0.12     node01
+10.10.0.13     node02
 ```
 Next,
 
@@ -287,7 +287,7 @@ pi@node01 ~> sudo nano /etc/fstab
 ```
 And add the following line below the existing texts
 ```console
-192.168.2.3:/shared    /shared    nfs    defaults   0 0
+10.10.0.11:/shared    /shared    nfs    defaults   0 0
 ```
 Now, use the following to finish the mounting
 ```console
@@ -295,7 +295,7 @@ pi@node01 ~> sudo mount -a
 ```
 To check whether the shared storage is working. Open a new terminal window and login to your master node. Then create a blank file. 
 ```console
-ssh pi@192.168.2.3
+ssh pi@10.10.0.11
 ```
 ```console
 pi@master ~> cd /shared
@@ -327,16 +327,16 @@ Now edit the configuration file by searching for the keyword on the left (e.g. �
 pi@master ~> sudo nano /etc/slurm-llnl/slurm.conf
 ```
 ```console
-SlurmctldHost=master(192.168.2.3)
+SlurmctldHost=master(10.10.0.11)
 SelectType=select/cons_res
 SelectTypeParameters=CR_Core
 ClusterName=cluster
 ```
 Now we need to add the node information as well as partition at the end of the file. Delete the example entry for the compute node and add the following configurations for the cluster nodes:
 ```console
-NodeName=master NodeAddr=192.168.2.3 CPUs=4 State=UNKNOWN
-NodeName=node01 NodeAddr=192.168.2.4 CPUs=4 State=UNKNOWN
-NodeName=node02 NodeAddr=192.168.2.5 CPUs=4 State=UNKNOWN
+NodeName=master NodeAddr=10.10.0.11 CPUs=4 State=UNKNOWN
+NodeName=node01 NodeAddr=10.10.0.12 CPUs=4 State=UNKNOWN
+NodeName=node02 NodeAddr=10.10.0.13 CPUs=4 State=UNKNOWN
 PartitionName=picluster Nodes=node[01-02] Default=YES MaxTime=INFINITE State=UP
 ```
 Now we need to create a configuration for cgroup support
@@ -603,9 +603,9 @@ pi@master ~>nano hostfile
 ```
 Now add the following (Change the ip addresses accordingly)
 ```console
-192.168.2.3:4
-192.168.2.4:4
-192.168.2.5:4
+10.10.0.11:4
+10.10.0.12:4
+10.10.0.13:4
 ```
 NOTE: The last number “4” represents the number of cores(processors) in each CPU.
 
