@@ -401,12 +401,12 @@ Now add the following lines,
 /dev/sda*
 /dev/cpu/*/*
 /dev/pts/*
-/shared*
+/shared_dir*
 ```
 Now we need to set the same for all nodes. To do that we need to copy these files to the shared storage.
 ```console
-pi@master ~> sudo cp /etc/slurm-llnl/*.conf /shared
-pi@master ~> sudo cp /etc/munge/munge.key /shared
+pi@master ~> sudo cp /etc/slurm-llnl/*.conf /shared_dir
+pi@master ~> sudo cp /etc/munge/munge.key /shared_dir
 ```
 
 All done, now we need to enable and start SLURM Control Services and munge,
@@ -433,8 +433,8 @@ pi@node01 ~> sudo apt install slurmd slurm-client -y
 ```
 Upon installation, we need to copy the configuration files from the shared storage to the node.
 ```console
-pi@node01 ~> sudo cp /shared/munge.key /etc/munge/munge.key
-pi@node01 ~> sudo cp /shared/*.conf /etc/slurm-llnl/
+pi@node01 ~> sudo cp /shared_dir/munge.key /etc/munge/munge.key
+pi@node01 ~> sudo cp /shared_dir/*.conf /etc/slurm-llnl/
 ```
 Similar to the master node, we need to enable and start slurm daemon and munge on the nodes.
 ```console
