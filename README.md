@@ -602,9 +602,6 @@ pi@master ~> ssh-copy-id pi@node01
 ```console
 pi@master ~> ssh-copy-id pi@node02
 ```
-```console
-pi@master ~> ssh-copy-id pi@node03
-```
 # Step - 10: OpenMPI
 
 OpenMPI is the Open sourced Message Passing Interface. In short it is a very abstract description on how messages can be exchanged between different processes. It will allow us to run a job across multiple nodes connected to the same cluster.
