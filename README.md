@@ -70,7 +70,12 @@ To do this part, you need a wireless router with DHCP enabled. The [Dynamic Host
 Now, login to the wireless router management page using browser. If your laptop is connected to the same network, just type the gateway IP. e.g. if you IP is 10.10.0.10, usually your gateway is 10.10.0.1, it's really simple. If you have trouble getting into the management page look for proper information on the router body. It's written somewhere on the body. After getting into the management page, go to the connected devices page and keep it open.
 
 ## Setting up Wireless Router for the first time
-:warning: If you want to use the router as modem, you need to follow the instruction given in the picture below:
+:warning: Instructions are applicable for TP-Link Routers. [Video instruction](https://youtu.be/Cg_gGECGLiY)
+Similar informations are available for other manufactures:
+D-Link Routers: https://eu.dlink.com/uk/en/support/faq/routers/mydlink-routers/dir-810l/how-do-i-set-up-and-install-my-router
+NETGEAR Routers: https://kb.netgear.com/119/How-do-I-set-up-and-install-my-NETGEAR-router
+
+If you want to use the router as modem, you need to follow the instruction given in the picture below:
 ![Tp-link modem setup](/images/tp-link-1.png)
 ![Tp-link modem setup 2](/images/tp-link-2.png)
 :warning: If you already have a modem and want use this device as a router only, follow the instruction below:
