@@ -479,28 +479,23 @@ pi@master ~>sinfo
 You should get an output something like this
 ```console
 PARTITION  AVAIL  TIMELIMIT  NODES  STATE NODELIST
-picluster*    up   infinite      3   idle node[01-03]
+picluster*    up   infinite      2   idle node[01-03]
 ```
 
-To resume the nodes
-```console
-sudo scontrol update NodeName=node[01-03] state=resume
-```
 You can simply run a task to ask the hostname for each node
 ```console
-pi@master ~>srun --nodes=3 hostname
+pi@master ~>srun --nodes=2 hostname
 ```
 It will give you an output similar to
 ```console
 node02
-node03
 node01
 ```
 # Step - 8: Powering On and Off (Cluster)
 Write a shell script with the following lines of codes and save it as clusterup.sh
 ```console
 #!/bin/bash
-sudo scontrol update NodeName=node[01-03] state=resume
+sudo scontrol update NodeName=node[01-02] state=resume
 sinfo
 echo "Nodes up and running"
 ```
@@ -515,7 +510,7 @@ sudo usermod –a –G admin pi
 ```
 Now edit sudoers file 
 ```console
-sudo vim /etc/sudoers
+sudo nano /etc/sudoers
 ```
 Add these lines or edit accordingly
 ```console
@@ -536,7 +531,6 @@ echo "====================="
 sudo scontrol update NodeName=node[01-03] state=down reason="power down"
 ssh node01 "sudo halt"
 ssh node02 "sudo halt"
-ssh node03 "sudo halt"
 echo "Nodes disconnected and shutting down"
 echo "Do you want to shutdown master node too?"
 echo "Press 'y' to continue or q to abort"
