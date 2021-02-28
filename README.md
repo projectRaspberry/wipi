@@ -48,12 +48,19 @@ sudo dd if=2020-02-13-raspbian-buster-lite.img of=/dev/disk2
 If successful, a drive will be mounted under the name boot. Raspberry Pis usually comes with disabled SSH configuration. We don’t want that. To enable it create an empty file inside the boot directory. 
 
 For MacOS, you can find it under /Volume/boot
-
+```console
+cd /Volume/boot/
+```
 Now, type
 ```console
 touch ssh 
 ```
-Now, we have successfully configured a Raspbian Lite OS having ssh enabled. Let’s eject the card from the Mac
+Now, we have successfully configured a Raspbian Lite OS having ssh enabled. 
+
+Let’s eject the card from the Mac
+```console
+cd ..
+```
 ```console
 diskutil unmountDisk /dev/disk2
 ```
