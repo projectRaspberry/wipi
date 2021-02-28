@@ -236,7 +236,7 @@ pi@master ~> sudo apt install nfs-kernel-server -y
 ```
 Now, edit /etc/exports and add the following line to export
 ```console
-sudo nano /etc/exports
+pi@master ~>sudo nano /etc/exports
 ```
 ```console
 /shared_dir 10.10.0.0/24(rw,sync,no_root_squash,no_subtree_check)
