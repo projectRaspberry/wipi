@@ -84,12 +84,12 @@ ping 10.10.0.11
 You should get an output very similar to the following
 ```console
 PING 10.10.0.11: 56 data bytes
-64 bytes from 10.10.0.10: icmp_seq=0 ttl=59 time=1.947 ms
-64 bytes from 10.10.0.10: icmp_seq=1 ttl=59 time=3.582 ms
-64 bytes from 10.10.0.10: icmp_seq=2 ttl=59 time=3.595 ms
-64 bytes from 10.10.0.10: icmp_seq=3 ttl=59 time=3.619 ms
+64 bytes from 10.10.0.11: icmp_seq=0 ttl=59 time=1.947 ms
+64 bytes from 10.10.0.11: icmp_seq=1 ttl=59 time=3.582 ms
+64 bytes from 10.10.0.11: icmp_seq=2 ttl=59 time=3.595 ms
+64 bytes from 10.10.0.11: icmp_seq=3 ttl=59 time=3.619 ms
 ...
---- 192.168.1.3 ping statistics ---
+--- 10.10.0.11 ping statistics ---
 6 packets transmitted, 6 packets received, 0.0% packet loss
 round-trip min/avg/max/stddev = 1.947/3.317/3.635/0.614 ms
 ```
@@ -135,7 +135,7 @@ pi@raspberrypi ~> sudo nano /etc/hosts
 
 Add the following at the bottom of the existing information
 ```console
-127.0.1.1       master
+127.0.1.1      master
 10.10.0.11     master
 10.10.0.12     node01
 10.10.0.13     node02
