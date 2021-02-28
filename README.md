@@ -47,9 +47,9 @@ sudo dd if=2020-02-13-raspbian-buster-lite.img of=/dev/disk2
 ```
 If successful, a drive will be mounted under the name boot. Raspberry Pis usually comes with disabled SSH configuration. We don’t want that. To enable it create an empty file inside the boot directory. 
 
-For MacOS, you can find it under /Volume/boot
+For MacOS, you can find it under /Volumes/boot
 ```console
-cd /Volume/boot/
+cd /Volumes/boot/
 ```
 Now, type
 ```console
