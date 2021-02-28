@@ -290,9 +290,9 @@ sudo apt install nfs-common -y
 ```
 Now, we need to create the same directory in order to mount the storage.
 ```console
-pi@node01 ~> sudo mkdir /shared 
-pi@node01 ~> sudo chown nobody.nogroup /shared 
-pi@node01 ~> sudo chmod -R 777 /shared
+pi@node01 ~> sudo mkdir /shared_dir 
+pi@node01 ~> sudo chown nobody.nogroup /shared_dir 
+pi@node01 ~> sudo chmod -R 777 /shared_dir
 ```
 To allow automatic mounting we need to edit the fstab file for each node. Use the following command to edit,
 ```console
@@ -300,7 +300,7 @@ pi@node01 ~> sudo nano /etc/fstab
 ```
 And add the following line below the existing texts
 ```console
-10.10.0.11:/shared    /shared    nfs    defaults   0 0
+10.10.0.11:/shared_dir    /shared_dir    nfs    defaults   0 0
 ```
 Now, use the following to finish the mounting
 ```console
@@ -311,12 +311,12 @@ To check whether the shared storage is working. Open a new terminal window and l
 ssh pi@10.10.0.11
 ```
 ```console
-pi@master ~> cd /shared
+pi@master ~> cd /shared_dir
 pi@master ~> touch nas_test.dat
 ```
 Now go back to the node01 terminal and check the contents of your shared directory
 ```console
-pi@node01 ~> cd /shared
+pi@node01 ~> cd /shared_dir
 pi@node01 ~> ls
 ```
 If you see nas_test.dat file here, means you have successfully created a Network File System. If you can’t see, you may have to reboot the node once.
