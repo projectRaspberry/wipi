@@ -506,7 +506,7 @@ sudo groupadd admin
 ```
 Now add your users (or yourself) to that group
 ```console
-sudo usermod –a –G admin pi
+sudo usermod -a -G admin pi
 ```
 Now edit sudoers file 
 ```console
