@@ -71,10 +71,10 @@ Now, login to the wireless router management page using browser. If your laptop 
 
 ## Setting up Wireless Router for the first time
 If you want to use the router as modem, you need to follow the instruction given in the picture below:
-![Tp-link modem setup](/images/tp-link-1.jpg)
-![Tp-link modem setup 2](/images/tp-link-2.jpg)
+![Tp-link modem setup](/images/tp-link-1.png)
+![Tp-link modem setup 2](/images/tp-link-2.png)
 If you already have a modem and want use this device as a router only, follow the instruction below:
-![Tp-link modem setup 3](/images/tp-link-3.jpg)
+![Tp-link modem setup 3](/images/tp-link-3.png)
 Now, power on the master node first by connecting the USB-C cable from a power outlet (or the 6-port USB power supply) and keep refresing the page. If everything goes well, you should see a new device named **raspberrypi** connected to the network. Now note down the IPV4 address associated with it.
 
 Next, power on the one off the compute nodes and do the same (note it as node01). Repeat the process for all the compute nodes. At the end, you should have something similar to the following information with you:
