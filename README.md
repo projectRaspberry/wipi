@@ -190,9 +190,9 @@ sudo mkfs.ext4 /dev/sda1
 
 Now, we need to create a directory where the storage will be mounted. We can choose any name for that. But, lets choose something that is easy to remember e.g. “shared”,
 ```console
-sudo mkdir /shared
-sudo chown nobody.nogroup -R /shared
-sudo chmod 777 -R /shared
+sudo mkdir /shared_dir
+sudo chown nobody.nogroup -R /shared_dir
+sudo chmod 777 -R /shared_dir
 ```
 
 Now, we need to configure to mount the storage during boot. For, that we need the the UUID of the storage. We can find that using the following command,
@@ -212,7 +212,7 @@ pi@master ~> sudo nano /etc/fstab
 ```
 Add the following line:
 ```console
-UUID=78543e7a-4hy6-7yea-1274-01e0ff974531 /shared ext4 defaults 0 2
+UUID=78543e7a-4hy6-7yea-1274-01e0ff974531 /shared_dir ext4 defaults 0 2
 ```
 All done, now we can mount the drive using the following command,
 ```console
@@ -229,7 +229,7 @@ pi@master ~> sudo apt install nfs-kernel-server -y
 ```
 Now, edit /etc/exports and add the following line to export
 ```console
-/shared 10.10.0.0/24(rw,sync,no_root_squash,no_subtree_check)
+/shared_dir 10.10.0.0/24(rw,sync,no_root_squash,no_subtree_check)
 ```
 Remember, depending upon the IP address schema used on your local network, the ip will be different for setup. For example, if your master node ip is 192.168.0.11, then you need to replace the ip with 192.168.0.0/24.
 
