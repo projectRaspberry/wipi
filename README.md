@@ -73,8 +73,8 @@ Now, login to the wireless router management page using browser. If your laptop 
 :warning: Instructions are applicable for TP-Link Routers. :clapper: [Video instruction](https://youtu.be/Cg_gGECGLiY)
 
 Similar informations are available for other manufactures:
-- D-Link Routers: https://eu.dlink.com/uk/en/support/faq/routers/mydlink-routers/dir-810l/how-do-i-set-up-and-install-my-router
-- NETGEAR Routers: https://kb.netgear.com/119/How-do-I-set-up-and-install-my-NETGEAR-router
+- D-Link Routers: [Click Here](https://eu.dlink.com/uk/en/support/faq/routers/mydlink-routers/dir-810l/how-do-i-set-up-and-install-my-router) :point_left:
+- NETGEAR Routers: [Click Here](https://kb.netgear.com/119/How-do-I-set-up-and-install-my-NETGEAR-router):point_left:
 
 If you want to use the router as modem, you need to follow the instruction given in the picture below:
 ![Tp-link modem setup](/images/tp-link-1.png)
