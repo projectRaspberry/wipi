@@ -236,6 +236,9 @@ pi@master ~> sudo apt install nfs-kernel-server -y
 ```
 Now, edit /etc/exports and add the following line to export
 ```console
+sudo nano /etc/exports
+```
+```console
 /shared_dir 10.10.0.0/24(rw,sync,no_root_squash,no_subtree_check)
 ```
 Remember, depending upon the IP address schema used on your local network, the ip will be different for setup. For example, if your master node ip is 192.168.0.11, then you need to replace the ip with 192.168.0.0/24.
