@@ -528,7 +528,7 @@ Write a shell script with the following lines of codes and save it as clusterdow
 #!/bin/bash
 echo "WiPi Cluster Shutdown"
 echo "====================="
-sudo scontrol update NodeName=node[01-03] state=down reason="power down"
+sudo scontrol update NodeName=node[01-02] state=down reason="power down"
 ssh node01 "sudo halt"
 ssh node02 "sudo halt"
 echo "Nodes disconnected and shutting down"
