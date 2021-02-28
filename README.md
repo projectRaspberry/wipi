@@ -607,9 +607,9 @@ pi@master ~> ssh-copy-id pi@node02
 OpenMPI is the Open sourced Message Passing Interface. In short it is a very abstract description on how messages can be exchanged between different processes. It will allow us to run a job across multiple nodes connected to the same cluster.
 ```console
 pi@master ~>sudo su -
-#srun —-nodes=3 apt install openmpi-bin openmpi-common libopenmpi3 libopenmpi-dev -y
+#srun —-nodes=2 apt install openmpi-bin openmpi-common libopenmpi3 libopenmpi-dev -y
 ```
-Note: the number 3 was chosen based on our available nodes.
+Note: the number 2 was chosen based on our available nodes.
 
 If you are interested in using master node as well, you need to install the same for master node too.
 ```console
@@ -667,12 +667,12 @@ mpicc hello_mpi.c
 This would create an executable name a.out
 You can run the executable using the following command
 ```console
-mpirun -np 3 -hostfile hostfile ./a.out
+mpirun -np 2 -hostfile hostfile ./a.out
 ```
 Now, let’s test the same using SLURM job manager. In order to do so, first we have to create a job script. Create a file named hello_mpi.sh and enter the following lines
 ```console
 #!/bin/bash
-#SBATCH --nodes=3
+#SBATCH --nodes=2
 #SBATCH --ntasks-per-node=4
 #SBATCH --partition=picluster
 cd $SLURM_SUBMIT_DIR
