@@ -166,7 +166,7 @@ sudo reboot
 ```
 After, successful reboot, login to the master node again using ssh. 
 
-Next stop, shared storage:
+### Next stop, shared storage:
 
 The concept of cluster is based on idea of working together. In order to do so, they need to have access to the same files. We can arrange this mounting an external SSD drive (not necessary but convenient and faster) and exporting that storage as a network file system (NFS). It would allow us to access the files from all nodes.
 
@@ -274,6 +274,10 @@ Next,
 System Update and Upgrade
 ```console
 pi@raspberrypi ~> sudo apt-get update && sudo apt-get upgrade
+```
+We can enable network time update here, just like master
+```console
+pi@raspberrypi ~> sudo apt install ntpdate -y
 ```
 Now reboot the system to apply the effect of changes that have been made so far.
 ```console
