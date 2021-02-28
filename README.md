@@ -554,7 +554,7 @@ done
 Now make these scripts executable using the following command
 ```console
 pi@master ~>chmod a+x clusterup.sh
-pi@master ~>chmod a+x clusterup.sh
+pi@master ~>chmod a+x clusterdown.sh
 ```
 Each time you power on your cluster, run this script at the startup using the following command.
 ```console
