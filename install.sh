@@ -58,14 +58,29 @@ exportfs -a
 ################# SET UP HOSTNAME and HOSTS###############
 echo "master" > /etc/hostname
 
-echo "$masterIp\tmaster" >> /etc/hosts
+echo "$masterIp master" >> /etc/hosts
 nCount=1
 while [ $nCount -le $numNodes ]
 do
-  echo "${nodeIp[$nCount]}\tnode0$nCount" >> /etc/hosts
+  echo "${nodeIp[$nCount]} node0$nCount" >> /etc/hosts
   ((nCount++))
 done
 
 ############### CONFIGURE SLURM ####################
+
+git clone https://github.com/sayanadhikari/wipi.git
+cp /wipi/configuration_files/* /etc/slurm-llnl/
+sed -i "s/master(192.168.2.2)/master($masterIp)/g" /etc/slurm-llnl/slurm.conf
+sed -i "s/NodeAddr=192.168.2.2/NodeAddr=$masterIp/g" /etc/slurm-llnl/slurm.conf
+
+
+nCount=1
+while [ $nCount -le $numNodes ]
+do
+  sed -i "s/NodeAddr=192.168.2.$nCount/NodeAddr=${nodeIp[$nCount]}/g" /etc/slurm-llnl/slurm.conf
+  echo "${nodeIp[$nCount]}\tnode0$nCount" >> /etc/hosts
+  ((nCount++))
+done
+
 
 echo All done
