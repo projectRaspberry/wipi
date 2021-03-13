@@ -1,5 +1,5 @@
 Building HPC with Raspberry Pi
-===========================
+=========================== 
 ![Raspberry Pi Cluster View](/images/pi_cluster_view2.jpg)
 ![Raspberry Pi Cluster View](/images/pi_cluster_view1.jpg)
 
