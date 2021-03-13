@@ -123,15 +123,19 @@ Now, log in to your master node using
 ssh pi@10.10.0.11
 ```
 Upon connection use password raspberry. (Note: it is the default password)
-
+```console
 wget https://raw.githubusercontent.com/sayanadhikari/wipi/automated/deployment/master_deployment.sh
 
 sudo bash ./master_deployment.sh
+```
 
+# Step - 4: Setting Up the Worker Nodes
 
+```console
+https://raw.githubusercontent.com/sayanadhikari/wipi/automated/deployment/node_deployment.sh
 
-
-
+sudo bash ./node_deployment.sh node01
+```
 
 
 
