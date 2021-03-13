@@ -131,6 +131,15 @@ wget https://raw.githubusercontent.com/sayanadhikari/wipi/automated/deployment/m
 sudo bash ./master_deployment.sh
 ```
 
+After reboot, log-in to the master node again using 
+```console
+ssh pi@10.10.0.11
+```
+and run the command
+```console
+chmod 777 -R /shared_dir
+```
+
 # Step - 4: Setting Up the Worker Nodes
 
 Now, log in to your worker node using
