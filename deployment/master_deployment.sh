@@ -28,13 +28,6 @@ cp hosts /etc/hosts
 cd
 
 echo "Setting up system locale and keyboards"
-#locale=en_US.UTF-8
-#layout=us
-#hostname=master
-#raspi-config nonint do_change_locale $locale
-#raspi-config nonint do_configure_keyboard $layout
-#raspi-config noint do_hostname $hostname
-
 timezone=US/Eastern
 timedatectl set-timezone $timezone
 
@@ -49,11 +42,11 @@ chmod 777 -R /shared_dir
 UUID=$(blkid -o value -s UUID /dev/sda1)
 echo "UUID=${UUID} /shared_dir ext4 defaults 0 2" >> /etc/fstab
 
-sudo mount -a
+mount -a
 
 echo "/shared_dir 10.10.0.0/24(rw,sync,no_root_squash,no_subtree_check)" >> /etc/exports
 
-sudo exportfs -a
+exportfs -a
 
 echo "Rebooting system, please wait ...."
 reboot
