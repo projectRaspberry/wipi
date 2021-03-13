@@ -22,18 +22,18 @@ chown -R pi:pi /home/pi/wipi
 cd /home/pi/wipi/deployment/config_data/master
 
 hostname master
-#cp hostname /etc/hostname
+cp hostname /etc/hostname
 cp hosts /etc/hosts
 # Back to home dir
 cd
 
 echo "Setting up system locale and keyboards"
-locale=en_US.UTF-8
-layout=us
-hostname=master
-raspi-config nonint do_change_locale $locale
-raspi-config nonint do_configure_keyboard $layout
-raspi-config noint do_hostname $hostname
+#locale=en_US.UTF-8
+#layout=us
+#hostname=master
+#raspi-config nonint do_change_locale $locale
+#raspi-config nonint do_configure_keyboard $layout
+#raspi-config noint do_hostname $hostname
 
 timezone=US/Eastern
 timedatectl set-timezone $timezone
