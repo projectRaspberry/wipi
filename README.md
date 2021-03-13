@@ -59,7 +59,7 @@ Now, we have successfully configured a Raspbian Lite OS having ssh enabled.
 
 Let’s eject the card from the Mac
 ```console
-cd ..
+cd
 ```
 ```console
 diskutil unmountDisk /dev/disk2
