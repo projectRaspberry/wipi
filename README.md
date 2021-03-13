@@ -124,6 +124,61 @@ ssh pi@10.10.0.11
 ```
 Upon connection use password raspberry. (Note: it is the default password)
 
+wget https://raw.githubusercontent.com/sayanadhikari/wipi/automated/deployment/master_deployment.sh
+
+sudo bash ./master_deployment.sh
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Now, we need to configure the node before starting to use. 
 ```console
 pi@raspberrypi~$ sudo raspi-config
