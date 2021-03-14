@@ -216,7 +216,7 @@ pi@master ~> cd /home/pi/wipi/deployment
 ```
 Now run the script *slurm_config_nodes.sh* to prepare the worker node for slurm.
 ```console
-pi@raspberrypi~$ sudo bash slurm_config_nodes.sh
+pi@master~$ sudo bash slurm_config_nodes.sh
 ```
 To ensure smooth operation, the system will reboot at this point.
 
