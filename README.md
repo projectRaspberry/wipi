@@ -274,30 +274,6 @@ sudo scontrol update NodeName=node[01-02] state=resume
 sinfo
 echo "Nodes up and running"
 ```
-
-Now, you need to setup password less super user access to perform the next action. To do that efficiently, we need to create admin groups
-```console
-sudo groupadd admin
-```
-Now add your users (or yourself) to that group
-```console
-sudo usermod -a -G admin pi
-```
-Now edit sudoers file 
-```console
-sudo nano /etc/sudoers
-```
-Add these lines or edit accordingly
-```console
-# User privilege specification
-root	ALL=(ALL:ALL) ALL
-# Allow members of group sudo to execute any command
-%sudo	ALL=(ALL:ALL) ALL
-%admin	ALL=(ALL) ALL
-# See sudoers(5) for more information on "#include" directives:
-%admin	ALL=(ALL) NOPASSWD: ALL
-```
-REPEAT this process for each node. Starting from admin group add.
 Write a shell script with the following lines of codes and save it as clusterdown.sh
 ```console
 #!/bin/bash
