@@ -16,13 +16,6 @@ cp $wipi_repo/deployment/slurm_config/* /etc/slurm-llnl/
 echo "Copying munge key to the shared directory"
 cp /etc/munge/munge.key /shared_dir
 
-echo "Generating RSA Key for authentication"
-ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
-
-echo "copying rsa key to the nodes"
-echo -e "yes\nraspberry\n" | ssh-copy-id pi@node01
-echo -e "yes\nraspberry\n" | ssh-copy-id pi@node02
-
 echo "Add a new group named admin and add pi to it"
 groupadd admin
 usermod -a -G admin pi
