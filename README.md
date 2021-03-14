@@ -162,9 +162,9 @@ At the end of the script execution, the system will automatically reboot. After 
 ```console
 ssh pi@10.10.0.11
 ```
-and run the fowwing command
+and run the following command
 ```console
-pi@raspberrypi~$ chmod 777 -R /shared_dir
+pi@master~$ chmod 777 -R /shared_dir
 ```
 
 # Step - 4: Setting Up the Worker Nodes
