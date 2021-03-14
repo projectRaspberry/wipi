@@ -287,21 +287,10 @@ If you wanr to check the temperatures of individual nodes use the following comm
 ```console
 pi@master ~>temprasp
 ```
-# Step - 10: OpenMPI
+# Step - 9: OpenMPI
 
 OpenMPI is the Open sourced Message Passing Interface. In short it is a very abstract description on how messages can be exchanged between different processes. It will allow us to run a job across multiple nodes connected to the same cluster.
-```console
-pi@master ~>sudo su -
-#srun --nodes=2 apt install openmpi-bin openmpi-common libopenmpi3 libopenmpi-dev -y
-```
-Note: the number 2 was chosen based on our available nodes.
 
-Now press Ctrl+d to exit from su-
-
-If you are interested in using master node as well, you need to install the same for master node too.
-```console
-pi@master ~>sudo apt install openmpi-bin openmpi-common libopenmpi3 libopenmpi-dev -y
-```
 Now create a host file to run MPI jobs
 ```console
 pi@master ~>nano hostfile
