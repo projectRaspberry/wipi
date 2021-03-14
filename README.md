@@ -12,7 +12,7 @@ Building HPC with Raspberry Pi
  - 3x CAT 5/6 Ethernet Cable
  - 1x 5-port 10/100/1000 network switch (Optional)
  - 1x 6-port USB power-supply (optional)
- - 1x 128GB SSD/external HDD (optional)
+ - 1x SSD/external HDD or Flash drive
 
 # Step - 1: Prepare the Micro-SD cards for Raspberry Pi OS
 Download latest version of Raspbian Lite OS by using your MacOS/Linux terminal and type
@@ -129,12 +129,31 @@ ssh pi@10.10.0.11
 Upon connection use password *raspberry*. (Note: it is the default password)
 
 
-
 Now, use the following command to download the shell script for master node
 ```console
 pi@raspberrypi~$ wget https://raw.githubusercontent.com/sayanadhikari/wipi/automated/deployment/master_deployment.sh
 ```
-The script you just downloaded should be in */home/pi/* with the name *master_deployment.sh*. Now run the script to prepare the master node.
+The script you just downloaded should be in */home/pi/* with the name *master_deployment.sh*.
+
+#### Safety check for shared storage:
+
+Just before setting up the network, we inserted the external storage into master node. Now use the following command to see the dev location and mount point of your storage.
+```console
+pi@master ~> lsblk
+NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+mmcblk0     105:0    0  7.4G  0 disk 
+├─mmcblk0p1 105:1    0 43.8M  0 part /boot
+└─mmcblk0p2 105:2    0  7.4G  0 part /
+sda         3:16     0 59.2G  0 disk
+└─sda1      3:17     0 59.2G  0 part
+```
+In our case, the main partition of the external storage is mounted at */dev/sda1*. However, if it is different for you, you should edit the *master_deployment.sh* file and modify the following lines accordingly. (Note: replace */dev/sda1* with */dev/sda2* or whatever path you get from *lsblk* command)
+```shell
+mkfs.ext4 /dev/sda1
+UUID=$(blkid -o value -s UUID /dev/sda1)
+```
+
+Now run the script to prepare the master node.
 ```console
 pi@raspberrypi~$ sudo bash ./master_deployment.sh
 ```
@@ -148,8 +167,7 @@ pi@raspberrypi~$ chmod 777 -R /shared_dir
 ```
 
 # Step - 4: Setting Up the Worker Nodes
-
-Now, log in to your worker node using
+We already have the IPs for worker nodes [See Step - 2](#step---2-network-setup). Now let's prepare them one by one. Log into node01 by using the following command,
 ```console
 ssh pi@10.10.0.12
 ```
@@ -167,218 +185,6 @@ At the end of the script execution, the system will automatically reboot.
 
 Now repeat the process for rest of the worker nodes. Remember to replace “node01” word in the last command with their respective node numbers.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Next stop, shared storage:
-
-The concept of cluster is based on idea of working together. In order to do so, they need to have access to the same files. We can arrange this mounting an external SSD drive (not necessary but convenient and faster) and exporting that storage as a network file system (NFS). It would allow us to access the files from all nodes.
-
-First, insert the external storage into your master node. Now login to your master node using ssh and use the following command to see the dev location and mount point of your storage.
-```console
-pi@master ~> lsblk
-NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
-mmcblk0     105:0    0  7.4G  0 disk 
-├─mmcblk0p1 105:1    0 43.8M  0 part /boot
-└─mmcblk0p2 105:2    0  7.4G  0 part /
-sda         3:16     0 59.2G  0 disk
-└─sda1      3:17     0 59.2G  0 part
-```
-
-In our case, the main partition of the external storage is mounted at /dev/sda1
-Before, using it as a NFS drive, we need to format it properly in ext4 file system. Use the following command to do that.
-```console
-sudo mkfs.ext4 /dev/sda1
-```
-:warning: Note: If you are not using any external storage, and want to use the Micro-SD card instead skip the formatting.
-
-Now, we need to create a directory where the storage will be mounted. We can choose any name for that. But, lets choose something that is easy to remember e.g. “shared”,
-```console
-sudo mkdir /shared_dir
-sudo chown nobody.nogroup -R /shared_dir
-sudo chmod 777 -R /shared_dir
-```
-
-Now, we need to configure to mount the storage during boot. For, that we need the the UUID of the storage. We can find that using the following command,
-```console
-pi@master ~> blkid
-```
-```console
-/dev/mmcblk0p1: LABEL_FATBOOT="boot" LABEL="boot" UUID="4BBD-D3E7" TYPE="vfat" PARTUUID="738a4d67-01"
-/dev/mmcblk0p2: LABEL="rootfs" UUID="45e99191-771b-4e12-a526-0779148892cb" TYPE="ext4" PARTUUID="738a4d67-02"
-/dev/sda1: UUID="50e407fc-37d8-4eb4-994d-ca6254c4e12e" TYPE="ext4"
-```
-Now, copy the number from /dev/sda1 if you are using external HDD. Otherwise, copy the number from /dev/mmcblk0p2. It’ll look like
-UUID=“50e407fc-37d8-4eb4-994d-ca6254c4e12e”
-Now, open and edit fstab to mount the drive on boot.
-```console
-pi@master ~> sudo nano /etc/fstab
-```
-Add the following line:
-```console
-UUID=78543e7a-4hy6-7yea-1274-01e0ff974531 /shared_dir ext4 defaults 0 2
-```
-All done, now we can mount the drive using the following command,
-```console
-pi@master ~> sudo mount -a
-```
-If it fails for some reason, reboot the master node and try again. If it is still not working double check the process and look for typo.
-
-### Enable NFS Share
-
-
-Now, we have a storage that can be shared but we need to install NFS server on master node in order to do so.
-```console
-pi@master ~> sudo apt install nfs-kernel-server -y
-```
-Now, edit /etc/exports and add the following line to export
-```console
-pi@master ~>sudo nano /etc/exports
-```
-```console
-/shared_dir 10.10.0.0/24(rw,sync,no_root_squash,no_subtree_check)
-```
-Remember, depending upon the IP address schema used on your local network, the ip will be different for setup. For example, if your master node ip is 192.168.0.11, then you need to replace the ip with 192.168.0.0/24.
-
-Now, we can update the configuration of the NFS kernel with the following command,
-```console
-sudo exportfs -a
-```
-One of the tasks for NFS to work remains unfinished which we will do in the next section.
-
-# Step - 4: Setting Up the Worker Nodes
-We already have the IPs for worker nodes [See Step - 2](#step---2-network-setup). Now let's prepare them one by one. Log into node01 by using the following command,
-```console
-ssh pi@10.10.0.12
-```
-It will ask for a password, use the default one “raspberry.” It will open up a terminal, the same that you had for the master. Now configure the node using 
-```console
-pi@raspberrypi~$ sudo raspi-config
-```
-It opens up the config utility. Next you should set the locale, timezone, and wifi country. Then, select finish and press enter to exit the utility. Exactly same what you did for the master node, except the password. 
-
-Now let’s update the hostname.
-```console
-pi@raspberrypi ~> sudo hostname node01
-```
-Change "raspberrypi" to “node01” by editing the hostname file.
-```console    
-pi@raspberrypi ~> sudo nano /etc/hostname  
-```
-Now edit the hosts file
-```console
-pi@raspberrypi ~> sudo nano /etc/hosts  
-```
-Add the following
-```console
-127.0.1.1      node01
-10.10.0.11     master
-10.10.0.12     node01
-10.10.0.13     node02
-```
-Next,
-
-System Update and Upgrade
-```console
-pi@raspberrypi ~> sudo apt-get update && sudo apt-get upgrade
-```
-We can enable network time update here, just like master
-```console
-pi@raspberrypi ~> sudo apt install ntpdate -y
-```
-Now reboot the system to apply the effect of changes that have been made so far.
-```console
-pi@raspberrypi ~> sudo reboot
-```
-
-After the reboot, login to the system again.
-
-### NFS MOUNT
-
-To access the storage that we shared on master node from individual worker nodes, we need to install and configure NFS services.
-```console
-sudo apt install nfs-common -y
-```
-Now, we need to create the same directory in order to mount the storage.
-```console
-pi@node01 ~> sudo mkdir /shared_dir 
-pi@node01 ~> sudo chown nobody.nogroup /shared_dir 
-pi@node01 ~> sudo chmod -R 777 /shared_dir
-```
-To allow automatic mounting we need to edit the fstab file for each node. Use the following command to edit,
-```console
-pi@node01 ~> sudo nano /etc/fstab
-```
-And add the following line below the existing texts
-```console
-10.10.0.11:/shared_dir    /shared_dir    nfs    defaults   0 0
-```
-Now, use the following to finish the mounting
-```console
-pi@node01 ~> sudo mount -a
-```
-To check whether the shared storage is working. Open a new terminal window and login to your master node. Then create a blank file. 
-```console
-ssh pi@10.10.0.11
-```
-```console
-pi@master ~> cd /shared_dir
-pi@master ~> touch nas_test.dat
-```
-Now go back to the node01 terminal and check the contents of your shared directory
-```console
-pi@node01 ~> cd /shared_dir
-pi@node01 ~> ls
-```
-If you see nas_test.dat file here, means you have successfully created a Network File System. If you can’t see, you may have to reboot the node once.
-
-Now repeat the process for rest of the worker nodes. Remember to replace “node01” word with their respective node numbers.
 
 # Step - 5: Configuring SLURM on master Node
 Slurm is an open source, and highly scalable cluster management and job scheduling system. It can be used for both large and small Linux clusters. Let’s install it on our Pi cluster.
