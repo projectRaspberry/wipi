@@ -41,6 +41,7 @@ echo "adding aliases to bashrc for smooth execution of scripts"
 echo "alias tempcheck='/cluster_manage_scripts/temprasp.sh'">>~/.bashrc
 echo "alias clusterup='/cluster_manage_scripts/clusterup.sh'">>~/.bashrc
 echo "alias clusterdown='/cluster_manage_scripts/clusterdown.sh'">>~/.bashrc
+source ~/.bashrc
 
 echo "Enable and start SLURM Control Services and munge"
 systemctl enable munge
