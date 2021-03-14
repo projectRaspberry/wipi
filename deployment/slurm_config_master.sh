@@ -43,6 +43,12 @@ echo "alias clusterup='/cluster_manage_scripts/clusterup.sh'">>~/.bashrc
 echo "alias clusterdown='/cluster_manage_scripts/clusterdown.sh'">>~/.bashrc
 source ~/.bashrc
 
+echo "Copying Cluster Management Scripts to HOME"
+cp -r $wipi_repo/open_mpi /shared_dir
+cp -r $wipi_repo/slurm_jobs /shared_dir
+chmod 777 /shared_dir/open_mpi
+chmod 777 /shared_dir/slurm_jobs
+
 echo "Enable and start SLURM Control Services and munge"
 systemctl enable munge
 systemctl start munge
