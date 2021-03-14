@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --nodes=3
+#SBATCH --nodes=2
 #SBATCH --ntasks-per-node=4
 #SBATCH --partition=picluster
 cd $SLURM_SUBMIT_DIR
