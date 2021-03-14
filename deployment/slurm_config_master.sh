@@ -32,7 +32,7 @@ echo "%admin	ALL=(ALL) ALL" >>/etc/sudoers
 echo "%admin	ALL=(ALL) NOPASSWD: ALL" >>/etc/sudoers
 
 echo "Copying Cluster Management Scripts to HOME"
-cp -r $wipi_repo/cluster_manage_scripts ./
+cp -r $wipi_repo/cluster_manage_scripts ~/cluster_manage_scripts
 chmod 777 cluster_manage_scripts
 chmod a+x cluster_manage_scripts/clusterup.sh
 chmod a+x cluster_manage_scripts/clusterdown.sh
@@ -44,7 +44,7 @@ echo "alias clusterup='/cluster_manage_scripts/clusterup.sh'">>~/.bashrc
 echo "alias clusterdown='/cluster_manage_scripts/clusterdown.sh'">>~/.bashrc
 source ~/.bashrc
 
-echo "Copying Cluster Management Scripts to HOME"
+echo "Copying openmpi and slurm files to HOME"
 cp -r $wipi_repo/open_mpi /shared_dir
 cp -r $wipi_repo/slurm_jobs /shared_dir
 chmod 777 /shared_dir/open_mpi
