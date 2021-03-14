@@ -212,11 +212,11 @@ ssh pi@10.10.0.12
 
 Then, go to the deployment directory inside the wipi repository,
 ```console
-pi@master ~> cd /home/pi/wipi/deployment
+pi@node01 ~> cd /home/pi/wipi/deployment
 ```
 Now run the script *slurm_config_nodes.sh* to prepare the worker node for slurm.
 ```console
-pi@master~$ sudo bash slurm_config_nodes.sh
+pi@node01~$ sudo bash slurm_config_nodes.sh
 ```
 To ensure smooth operation, the system will reboot at this point.
 
