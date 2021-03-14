@@ -21,6 +21,7 @@ ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
 
 echo "copying rsa key to the nodes"
 echo -e "raspberry\n" | ssh-copy-id pi@node01
+echo -e "raspberry\n" | ssh-copy-id pi@node02
 
 echo "Add a new group named admin and add pi to it"
 groupadd admin
