@@ -69,6 +69,10 @@ Repeat this process for all three memory cards. Now insert the cards to your Ras
 
 Now plug in all the three memory cards in to the storage port of Raspberry Pis. Then connect the network cables(CAT5/6/6A) to in the ethernet port of Pis. Do not power on the Pis at the moment.
 
+The concept of cluster is based on idea of working together. In order to do so, they need to have access to the same files. We can arrange this mounting an external SSD drive (not necessary but convenient and faster) or flash drive, and exporting that storage as a network file system (NFS). It would allow us to access the files from all nodes.
+
+The process is straight forward and simple. At this point, insert the external storage into your master node.
+
 # Step - 2: Network Setup
 
 To do this part, you need a wireless router with DHCP enabled. The [Dynamic Host Configuration Protocol (DHCP)](https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol) will allocate IPs as soon as we connect our Raspberry Pis to the network. If you have network switch, first plugin the other end of the ethernet cables connected to Pis. Now plugin one extra cable from switch to Wireless router. Physical network complete. Now power on the wireless router and the switch. 
@@ -91,7 +95,7 @@ If you want to use the router as modem, you need to follow the instruction given
 ![Tp-link modem setup 3](/images/tp-link-1.png)
 Now, power on the master node first by connecting the USB-C cable from a power outlet (or the 6-port USB power supply) and keep refresing the page. If everything goes well, you should see a new device named **raspberrypi** connected to the network. Now note down the IPV4 address associated with it.
 
-Next, power on the one off the compute nodes and do the same (note it as node01). Repeat the process for all the compute nodes. At the end, you should have something similar to the following information with you:
+Next, **power on** one of the compute nodes and do the same (note it as node01). Repeat the process for all the compute nodes. At the end, you should have something similar to the following information with you:
 
 * master IPV4: **10.10.0.11**
 * node01 IPV4: **10.10.0.12**
@@ -123,14 +127,17 @@ Now, log in to your master node using
 ssh pi@10.10.0.11
 ```
 Upon connection use password *raspberry*. (Note: it is the default password)
-```console
-wget https://raw.githubusercontent.com/sayanadhikari/wipi/automated/deployment/master_deployment.sh
-```
 
-```console
-sudo bash ./master_deployment.sh
-```
 
+
+Now, use the following command to download the shell script for master node
+```console
+pi@raspberrypi~$ wget https://raw.githubusercontent.com/sayanadhikari/wipi/automated/deployment/master_deployment.sh
+```
+The script you just downloaded should be in */home/pi/* with the name *master_deployment.sh*. Now run the script to prepare the master node.
+```console
+pi@raspberrypi~$ sudo bash ./master_deployment.sh
+```
 After reboot, log-in to the master node again using 
 ```console
 ssh pi@10.10.0.11
@@ -147,13 +154,18 @@ Now, log in to your worker node using
 ssh pi@10.10.0.12
 ```
 Upon connection use password *raspberry*. (Note: it is the default password)
+
+Now, use the following command to download the shell script for worker node
 ```console
 wget https://raw.githubusercontent.com/sayanadhikari/wipi/automated/deployment/node_deployment.sh
 ```
-
+The script you just downloaded should be in */home/pi/* with the name *node_deployment.sh*. Now run the script to prepare the worker node.
 ```console
 sudo bash ./node_deployment.sh node01
 ```
+At the end of the script execution, the system will automatically reboot.
+
+Now
 
 
 
@@ -201,54 +213,8 @@ sudo bash ./node_deployment.sh node01
 
 
 
-Now, we need to configure the node before starting to use. 
-```console
-pi@raspberrypi~$ sudo raspi-config
-```
-It opens up the config utility. You can change the default password if you want (highly recommended). Next you should set the locale, timezone, and wifi country. Then, select finish and press enter to exit the utility.
-
-A snapshot of the utility screen is provided below.
-
-![Raspberry Pi Configuration Window](/images/raspi-config.jpg)
 
 
-### System Update and Upgrade
-```console
-pi@raspberrypi ~> sudo apt-get update && sudo apt-get upgrade
-```
-Now, we need to decide the hostnames for master node as well as cluster nodes. I would recommend to stick with the usual ones. Set “master” for master node and for cluster nodes starting from “node01” to “node02” (for 2 node cluster). Use the following command to set it up on master node.
-```console
-pi@raspberrypi ~> sudo hostname master     # choice of yours
-```
-Change "raspberrypi" to “master” by editing the hostname file.
-
-```console
-pi@raspberrypi ~> sudo nano /etc/hostname  
-```
-Now edit the hosts file
-```console
-pi@raspberrypi ~> sudo nano /etc/hosts   
-```
-
-Add the following at the bottom of the existing information
-```console
-127.0.1.1      master
-10.10.0.11     master
-10.10.0.12     node01
-10.10.0.13     node02
-```
-
-### Network time:
-
-Now, since we are planning for a HPC system that uses a SLURM scheduler and the Munge authentication, we need to make sure that the system time is accurate. For that purpose we can install ntpdate package to periodically sync the system time in the background.
-```console
-pi@raspberrypi ~> sudo apt install ntpdate -y
-```
-To apply the effect of changes that have been made so far reboot the system using the following command
-```console
-sudo reboot
-```
-After, successful reboot, login to the master node again using ssh. 
 
 ### Next stop, shared storage:
 
