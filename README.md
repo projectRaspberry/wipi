@@ -196,6 +196,12 @@ Then, go to the deployment directory inside the wipi repository,
 ```console
 pi@master ~> cd /home/pi/wipi/deployment
 ```
+
+To allow password-less ssh across the system, run the *password_less_ssh_master.sh* using the following command,
+```console
+pi@master~$ bash password_less_ssh_master.sh
+```
+
 Now run the script *slurm_config_master.sh* to prepare the master node for slurm.
 ```console
 pi@master~$ sudo bash slurm_config_master.sh
