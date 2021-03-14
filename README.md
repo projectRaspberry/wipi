@@ -293,7 +293,7 @@ OpenMPI is the Open sourced Message Passing Interface. In short it is a very abs
 
 Now let's test OPENMPI, go to the *open_mpi* directory inside *shared_dir*
 ```console
-pi@master ~>cd  /shared_dir/open_mpi
+pi@master ~>cd /shared_dir/open_mpi
 ```
 Now, compile the program using mpicc
 ```console
@@ -306,7 +306,7 @@ mpirun -np 2 -hostfile hostfile ./a.out
 ```
 Now, let’s test the same using SLURM job manager. In order to do so, first we have to create a job script. Go to the *slurm_jobs* directory inside *shared_dir*
 ```console
-pi@master ~>cd  /shared_dir/slurm_jobs
+pi@master ~>cd /shared_dir/slurm_jobs
 ```
 To submit a job use the following command
 ```console
