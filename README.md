@@ -219,6 +219,7 @@ pi@raspberrypi~$ sudo bash slurm_config_nodes.sh
 ```
 To ensure smooth operation, the system will reboot at this point.
 
+#### Diagnostic check for MUNGE
 Now, we need to verify whether our the SLURM controller can successfully authenticate with the client nodes using munge. In order to do that, we need to login to master node and use the following command,
 ```console
 pi@master ~> ssh pi@node01 munge -n | unmunge
