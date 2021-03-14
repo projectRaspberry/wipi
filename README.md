@@ -138,13 +138,13 @@ The script you just downloaded should be in */home/pi/* with the name *master_de
 ```console
 pi@raspberrypi~$ sudo bash ./master_deployment.sh
 ```
-After reboot, log-in to the master node again using 
+At the end of the script execution, the system will automatically reboot. After reboot, log-in to the master node again using 
 ```console
 ssh pi@10.10.0.11
 ```
-and run the command
+and run the fowwing command
 ```console
-chmod 777 -R /shared_dir
+pi@raspberrypi~$ chmod 777 -R /shared_dir
 ```
 
 # Step - 4: Setting Up the Worker Nodes
@@ -157,11 +157,11 @@ Upon connection use password *raspberry*. (Note: it is the default password)
 
 Now, use the following command to download the shell script for worker node
 ```console
-wget https://raw.githubusercontent.com/sayanadhikari/wipi/automated/deployment/node_deployment.sh
+pi@raspberrypi~$ wget https://raw.githubusercontent.com/sayanadhikari/wipi/automated/deployment/node_deployment.sh
 ```
 The script you just downloaded should be in */home/pi/* with the name *node_deployment.sh*. Now run the script to prepare the worker node.
 ```console
-sudo bash ./node_deployment.sh node01
+pi@raspberrypi~$ sudo bash ./node_deployment.sh node01
 ```
 At the end of the script execution, the system will automatically reboot.
 
