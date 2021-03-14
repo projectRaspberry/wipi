@@ -26,10 +26,10 @@ echo "%admin	ALL=(ALL) NOPASSWD: ALL" >>/etc/sudoers
 
 echo "Copying Cluster Management Scripts to HOME"
 cp -r $wipi_repo/cluster_manage_scripts ~/cluster_manage_scripts
-chmod 777 cluster_manage_scripts
-chmod a+x cluster_manage_scripts/clusterup.sh
-chmod a+x cluster_manage_scripts/clusterdown.sh
-chmod a+x cluster_manage_scripts/tempRasp.sh
+chmod 777 ~/cluster_manage_scripts
+chmod a+x ~/cluster_manage_scripts/clusterup.sh
+chmod a+x ~/cluster_manage_scripts/clusterdown.sh
+chmod a+x ~/cluster_manage_scripts/tempRasp.sh
 
 echo "adding aliases to bashrc for smooth execution of scripts"
 echo "alias tempcheck='~/cluster_manage_scripts/tempRasp.sh'">>~/.bashrc
