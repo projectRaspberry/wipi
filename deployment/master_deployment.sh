@@ -39,7 +39,7 @@ chown nobody.nogroup -R /shared_dir
 chmod 777 -R /shared_dir
 
 #In our case, the main partition of the external storage is mounted at /dev/sda1 
-# Before, using it as a NFS drive, we need to format it properly in ext4 file system. Use the following command to do that.
+# Before, using it as a NFS drive, we need to format it properly in ext4 file system.
 
 mkfs.ext4 /dev/sda1
 
