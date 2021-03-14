@@ -38,10 +38,10 @@ mkdir -p /shared_dir
 chown nobody.nogroup -R /shared_dir
 chmod 777 -R /shared_dir
 
-#In our case, the main partition of the external storage is mounted at /dev/sda1 
+#In our case, the main partition of the external storage is mounted at /dev/sda1
 # Before, using it as a NFS drive, we need to format it properly in ext4 file system.
 
-mkfs.ext4 /dev/sda1
+echo -e "y\n" | mkfs.ext4 /dev/sda1
 
 ## Remember to replace the long ID-number given below with your own received from "blkid" command
 UUID=$(blkid -o value -s UUID /dev/sda1)
