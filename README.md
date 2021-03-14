@@ -69,7 +69,8 @@ Repeat this process for all three memory cards. Now insert the cards to your Ras
 
 Now plug in all the three memory cards in to the storage port of Raspberry Pis. Then connect the network cables(CAT5/6/6A) to in the ethernet port of Pis. Do not power on the Pis at the moment.
 
-The concept of cluster is based on idea of working together. In order to do so, they need to have access to the same files. We can arrange this mounting an external SSD drive (not necessary but convenient and faster) or flash drive, and exporting that storage as a network file system (NFS). It would allow us to access the files from all nodes.
+#### External storage as shared storage
+The concept of cluster is based on idea of working together. In order to do so, they need to have access to the same files. We can arrange this by mounting an external SSD drive (not necessary but convenient and faster) or flash drive, and exporting that storage as a network file system (NFS). It would allow us to access the files from all nodes.
 
 The process is straight forward and simple. At this point, insert the external storage into your master node.
 
