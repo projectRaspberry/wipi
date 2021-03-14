@@ -206,22 +206,18 @@ To ensure smooth operation, the system will reboot at this point.
 
 We have successfully configured the master node, we need to do the same on compute nodes. Now, log into the one of the nodes let's say node01
 ```console
-pi@node01 ~> sudo apt install slurmd slurm-client -y
+ssh pi@10.10.0.12
 ```
-Upon installation, we need to copy the configuration files from the shared storage to the node.
+
+Then, go to the deployment directory inside the wipi repository,
 ```console
-pi@node01 ~> sudo cp /shared_dir/munge.key /etc/munge/munge.key
-pi@node01 ~> sudo cp /shared_dir/*.conf /etc/slurm-llnl/
+pi@master ~> cd /home/pi/wipi/deployment
 ```
-Similar to the master node, we need to enable and start slurm daemon and munge on the nodes.
+Now run the script *slurm_config_nodes.sh* to prepare the worker node for slurm.
 ```console
-pi@node01 ~> sudo systemctl enable munge
-pi@node01 ~> sudo systemctl start munge
+pi@raspberrypi~$ sudo bash slurm_config_nodes.sh
 ```
-```console
-pi@node01 ~> sudo systemctl enable slurmd
-pi@node01 ~> sudo systemctl start slurmd
-```
+To ensure smooth operation, the system will reboot at this point.
 
 Now, we need to verify whether our the SLURM controller can successfully authenticate with the client nodes using munge. In order to do that, we need to login to master node and use the following command,
 ```console
