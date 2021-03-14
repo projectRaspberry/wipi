@@ -164,7 +164,7 @@ ssh pi@10.10.0.11
 ```
 and run the following command
 ```console
-pi@master~$ chmod 777 -R /shared_dir
+pi@master~$ sudo chmod 777 -R /shared_dir
 ```
 
 # Step - 4: Setting Up the Worker Nodes
