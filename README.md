@@ -274,84 +274,18 @@ sudo scontrol update NodeName=node[01-02] state=resume
 sinfo
 echo "Nodes up and running"
 ```
-Write a shell script with the following lines of codes and save it as clusterdown.sh
+Each time you power on your cluster, run the following command at the startup,
 ```console
-#!/bin/bash
-echo "WiPi Cluster Shutdown"
-echo "====================="
-sudo scontrol update NodeName=node[01-02] state=down reason="power down"
-ssh node01 "sudo halt"
-ssh node02 "sudo halt"
-echo "Nodes disconnected and shutting down"
-echo "Do you want to shutdown master node too?"
-echo "Press 'y' to continue or q to abort"
-count=0
-while : ; do
-read -n 1 k <&1
-if [[ $k = y ]] ; then
-printf "\nShutting down Master Node\n"
-sudo halt
-elif [[ $k = q ]] ; then
-printf "\nShutdown aborted\n" 
-break
-else
-((count=$count+1))
-printf "\nWrong Key Pressed\n"
-echo "Press 'q' to abort"
-fi
-done
+pi@master ~>clusterup
 ```
+Each time you need to power off your cluster, run the following command,
+```console
+pi@master ~>clusterdown
+```
+If you wanr to check the temperatures of individual nodes use the following command,
 
-Now make these scripts executable using the following command
 ```console
-pi@master ~>chmod a+x clusterup.sh
-pi@master ~>chmod a+x clusterdown.sh
-```
-Each time you power on your cluster, run this script at the startup using the following command.
-```console
-pi@master ~>./clusterup.sh
-```
-Each time you need to power off your cluster, run this script at the end using the following command.
-```console
-pi@master ~>./clusterdown.sh
-```
-
-# Step - 9: Password-less SSH
-
-Now, we’ll set up password-less SSH on master node
-```console
-pi@master ~> ssh-keygen -t rsa
-```
-This would ask you for input, each time press enter key to proceed. After successful operation, the output will look like the following
-```console
-Generating public/private rsa key pair.
-Enter file in which to save the key (/home/pi/.ssh/id_rsa): 
-Created directory '/home/pi/.ssh'.
-Enter passphrase (empty for no passphrase): 
-Enter same passphrase again: 
-Your identification has been saved in /home/pi/.ssh/id_rsa.
-Your public key has been saved in /home/pi/.ssh/id_rsa.pub.
-The key fingerprint is:
-9b:98:c7:86:17:0a:1e:32:95:65:ee:1c:0f:48:48:ef pi@beira
-The key's randomart image is:
-+---[RSA 2048]----+
-| .... o          |
-|  .o *           |
-|    = +          |
-|   o o +         |
-|  o E o S        |
-|   + o * +       |
-|    . = B        |
-|       +         |
-|                 |
-+-----------------+
-```
-Now copy your rsa key to all the nodes
-```console
-pi@master ~> ssh-copy-id pi@node01
-```
-```console
-pi@master ~> ssh-copy-id pi@node02
+pi@master ~>temprasp
 ```
 # Step - 10: OpenMPI
 
