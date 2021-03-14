@@ -184,7 +184,7 @@ pi@raspberrypi~$ sudo bash ./node_deployment.sh node01
 ```
 At the end of the script execution, the system will automatically reboot.
 
-Now repeat the process for rest of the worker nodes. Remember to replace “node01” word in the last command with their respective node numbers.
+Now repeat the process for rest of the worker nodes. Login to rest of the worker nodes using their respective ips (information available at Step-2). Also, remember to replace “node01” word in the last command with their respective node numbers. 
 
 
 # Step - 5: Configuring SLURM on master Node
