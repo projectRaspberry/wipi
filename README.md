@@ -316,7 +316,7 @@ pi@master ~>cd /shared_dir/slurm_jobs
 ```
 To submit a job use the following command
 ```console
-sbatch hello_mpi.sh 
+sbatch hello_mpi_slurm.sh 
 ```
 To view the status of any job
 ```console
