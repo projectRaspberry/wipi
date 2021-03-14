@@ -165,7 +165,7 @@ pi@raspberrypi~$ sudo bash ./node_deployment.sh node01
 ```
 At the end of the script execution, the system will automatically reboot.
 
-Now
+Now repeat the process for rest of the worker nodes. Remember to replace “node01” word in the last command with their respective node numbers.
 
 
 
