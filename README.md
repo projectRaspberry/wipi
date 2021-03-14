@@ -291,7 +291,7 @@ pi@master ~>clusterdown
 If you wanr to check the temperatures of individual nodes use the following command,
 
 ```console
-pi@master ~>temprasp
+pi@master ~>tempcheck
 ```
 # Step - 9: OpenMPI
 
