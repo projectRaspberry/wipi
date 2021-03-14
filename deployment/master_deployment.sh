@@ -12,7 +12,7 @@ echo "Updating system, it may take a while..."
 
 apt -y update
 apt -y upgrade
-apt -y install git ntpdate screen vim-nox python3-pip nfs-kernel-server slurm-wlm munge openmpi-bin openmpi-common libopenmpi3 libopenmpi-dev build-essential
+apt -y install git sshpass ntpdate screen vim-nox python3-pip nfs-kernel-server slurm-wlm munge openmpi-bin openmpi-common libopenmpi3 libopenmpi-dev build-essential
 
 echo "Cloning Github repo.."
 git clone --recursive https://github.com/sayanadhikari/wipi.git
