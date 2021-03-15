@@ -9,7 +9,4 @@ ssh node01 'sudo /opt/vc/bin/vcgencmd measure_temp'
 echo "Temperature Node02"
 ssh node02 'sudo /opt/vc/bin/vcgencmd measure_temp'
 
-echo "Temperature Node03"
-ssh node03 'sudo /opt/vc/bin/vcgencmd measure_temp'
-
 echo "All done"
