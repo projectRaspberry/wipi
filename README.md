@@ -13,6 +13,7 @@ Building HPC with Raspberry Pi
  - 1x 5-port 10/100/1000 network switch (Optional) ([Shop at Amazon](https://www.amazon.com/NETGEAR-5-Port-Gigabit-Ethernet-Unmanaged/dp/B07S98YLHM/))
  - 1x 6-port USB power-supply (optional) ([Shop at Amazon](https://www.amazon.com/Anker-5-Port-Charger-PowerPort-iPhone/dp/B00VH8ZW02/))
  - 1x SSD/external HDD or Flash drive ([Shop at Amazon](https://www.amazon.com/PNY-Turbo-32GB-Flash-Drive/dp/B00FDUHD2K/))
+ - 1x Raspberry Pi 4 cluster case with cooling fan and heatsinks ([Shop at Amazon](https://www.amazon.com/GeeekPi-Cluster-Raspberry-Heatsink-Stackable/dp/B07MW24S61/))
 
 # Step - 1: Prepare the Micro-SD cards for Raspberry Pi OS
 Download latest version of Raspbian Lite OS by using your MacOS/Linux terminal and type
