@@ -32,9 +32,9 @@ chmod a+x /home/pi/cluster_manage_scripts/clusterdown.sh
 chmod a+x /home/pi/cluster_manage_scripts/tempRasp.sh
 
 echo "adding aliases to bashrc for smooth execution of scripts"
-echo "alias tempcheck='/home/pi/cluster_manage_scripts/tempRasp.sh'">>~/.bashrc
-echo "alias clusterup='/home/pi/cluster_manage_scripts/clusterup.sh'">>~/.bashrc
-echo "alias clusterdown='/home/pi/cluster_manage_scripts/clusterdown.sh'">>~/.bashrc
+echo "alias tempcheck='/home/pi/cluster_manage_scripts/tempRasp.sh'">>/home/pi/.bashrc
+echo "alias clusterup='/home/pi/cluster_manage_scripts/clusterup.sh'">>/home/pi/.bashrc
+echo "alias clusterdown='/home/pi/cluster_manage_scripts/clusterdown.sh'">>/home/pi/.bashrc
 
 echo "Copying openmpi and slurm files to HOME"
 cp -r $wipi_repo/open_mpi /shared_dir
