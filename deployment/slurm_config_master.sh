@@ -25,7 +25,12 @@ echo "%admin	ALL=(ALL) ALL" >>/etc/sudoers
 echo "%admin	ALL=(ALL) NOPASSWD: ALL" >>/etc/sudoers
 
 echo "Copying Cluster Management Scripts to HOME"
-cp -r $wipi_repo/cluster_manage_scripts ~/cluster_manage_scripts
+mkdir ~/cluster_manage_scripts
+cd ~/cluster_manage_scripts
+wget https://raw.githubusercontent.com/sayanadhikari/wipi/automated/cluster_manage_scripts/clusterup.sh
+wget https://raw.githubusercontent.com/sayanadhikari/wipi/automated/cluster_manage_scripts/clusterdown.sh
+wget https://raw.githubusercontent.com/sayanadhikari/wipi/automated/cluster_manage_scripts/tempRasp.sh
+cd
 chmod 777 ~/cluster_manage_scripts
 chmod a+x ~/cluster_manage_scripts/clusterup.sh
 chmod a+x ~/cluster_manage_scripts/clusterdown.sh
